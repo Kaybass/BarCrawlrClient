@@ -1,13 +1,11 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanSelectorFragment;
 
-public class PlanSelector extends AppCompatActivity {
+
+public class PlanSelector extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan_selector);
-    }
+    protected Fragment createFragment() { return new PlanSelectorFragment(); }
 }
