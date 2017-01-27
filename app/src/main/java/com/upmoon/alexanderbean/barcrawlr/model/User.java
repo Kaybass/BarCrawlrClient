@@ -1,6 +1,6 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
-import com.google.gson.Gson;
+
 
 /**
  * Created by Alex on 1/22/2017.
