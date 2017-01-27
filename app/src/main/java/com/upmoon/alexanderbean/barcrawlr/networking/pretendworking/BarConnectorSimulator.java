@@ -40,6 +40,11 @@ public class BarConnectorSimulator implements Connector {
     }
 
     @Override
+    public String sendCode(String code) {
+        return null;
+    }
+
+    @Override
     public String locationUpdate(User self) {
         return null;
     }

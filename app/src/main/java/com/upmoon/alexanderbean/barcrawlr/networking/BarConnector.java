@@ -14,11 +14,18 @@ public class BarConnector implements Connector {
     }
 
     /**
-     * public BarConnector(IP ADDRESS)
+     * public BarConnector(IP ADDRESS){
+     *     
+     * }
      */
 
     @Override
     public String sendPlan(Plan plan, User self) {
+        return null;
+    }
+
+    @Override
+    public String sendCode(String code) {
         return null;
     }
 

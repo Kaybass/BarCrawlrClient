@@ -19,6 +19,8 @@ import com.upmoon.alexanderbean.barcrawlr.model.User;
 public interface Connector {
     String sendPlan(Plan plan, User self);
 
+    String sendCode(String code);
+
     String locationUpdate(User self);
 
     String disconnect();
