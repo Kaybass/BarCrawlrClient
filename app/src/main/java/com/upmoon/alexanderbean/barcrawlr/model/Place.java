@@ -1,5 +1,7 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -8,20 +10,46 @@ import java.io.Serializable;
 
 public class Place implements Serializable{
 
-    private String mName, mAddress;
+    private String name, address;
 
-    private float mLat, mLon;
+    private double lon, lat;
 
-    public Place(String name, String address, float lat, float lon){
+    public Place(){
 
-        mName = name;
-        mAddress = address;
-        mLat = lat;
-        mLon = lon;
     }
 
-    public String jsonify(){
+    public Place(String name, String address, double lon, double lat){
 
-        return "";
+        this.name = name;
+        this.address = address;
+        this.lat = lat;
+        this.lon = lon;
+    }
+
+    public String toJson(){
+
+        Gson gson = new Gson();
+
+        return gson.toJson(this);
+    }
+
+    public String getName(){
+
+        return name;
+    }
+
+    public String getAddress(){
+
+        return address;
+    }
+
+    public double getLon(){
+
+        return lon;
+    }
+
+    public double getLat(){
+
+        return lat;
     }
 }

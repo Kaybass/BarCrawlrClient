@@ -16,5 +16,4 @@ package com.upmoon.alexanderbean.barcrawlr.networking;
 
 public interface Connector {
 
-
 }
