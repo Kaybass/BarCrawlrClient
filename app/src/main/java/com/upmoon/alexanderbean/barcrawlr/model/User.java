@@ -1,30 +1,43 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
+import com.google.gson.Gson;
+
 /**
  * Created by Alex on 1/22/2017.
  */
 
 public class User {
 
-    private String mNick;
+    private String name;
 
-    float mLat, mLon;
+    double lon, lat;
 
-    public User(String nick, float lat, float lon){
-        mNick = nick;
-        mLat = lat;
-        mLon = lon;
+    public User(){
+
     }
 
-    public String getNick(){
-        return mNick;
+    public User(String nick, double lon, double lat){
+        this.name = nick;
+        this.lat = lat;
+        this.lon = lon;
     }
 
-    public float getLat(){
-        return mLat;
+    public String toJson(){
+
+        return "{\"name\":\"" + name + "\",\"lon\":" +
+                Double.toString(lon) + ",\"lat\":" +
+                Double.toString(lat) + "}";
     }
 
-    public float getLon(){
-        return mLon;
+    public String getName() {
+        return name;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
     }
 }
