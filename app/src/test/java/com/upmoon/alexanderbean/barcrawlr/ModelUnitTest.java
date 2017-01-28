@@ -34,14 +34,14 @@ public class ModelUnitTest {
                 "{" +
                 "\"name\":\"Joe's Bar\"," +
                 "\"address\":\"10 King's Street, Burlington, 05401 VT\"," +
-                "\"lon\" : 0.0," +
-                "\"lat\" : 0.0" +
+                "\"lon\":0.0," +
+                "\"lat\":0.0" +
                 "}," +
                 "{" +
                 "\"name\":\"Bob's Bar\"," +
                 "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
-                "\"lon\" : 0.1," +
-                "\"lat\" : 0.1" +
+                "\"lon\":0.1," +
+                "\"lat\":0.1" +
                 "}," +
                 "]" +
                 "}";
@@ -51,7 +51,8 @@ public class ModelUnitTest {
         assertEquals("Alex's Plan",plan.getName());
         assertEquals(2,plan.getNumPlaces());
         assertEquals("Joe's Bar",plan.getPlace(0).getName());
-        //assertEquals(planJSON,plan.toJson());
+        //In the following test we make it such that the unicode apostrophes are replaced with ascii apostrophes
+        assertEquals(planJSON,plan.toJson().replace( "\\u0027","'"));
 
     }
 

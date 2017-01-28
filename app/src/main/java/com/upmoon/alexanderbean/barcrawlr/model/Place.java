@@ -8,6 +8,10 @@ import java.io.Serializable;
  * Created by Alex on 1/21/2017.
  */
 
+
+/**
+ *
+ */
 public class Place implements Serializable{
 
     private String name, address;

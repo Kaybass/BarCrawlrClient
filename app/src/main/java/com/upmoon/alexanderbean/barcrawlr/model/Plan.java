@@ -16,6 +16,10 @@ import java.util.ArrayList;
  * Created by AlexanderBean on 12/24/2016.
  */
 
+
+/**
+ *
+ */
 public class Plan implements Serializable{
 
     private String name;
@@ -61,7 +65,7 @@ public class Plan implements Serializable{
 
         String json = "";
 
-        json += "{\"name\":\"" + name + "\",places:[";
+        json += "{\"name\":\"" + name + "\",\"places\":[";
 
         Gson gson = new Gson();
 

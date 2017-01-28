@@ -14,7 +14,7 @@ public class BarConnector implements Connector {
     }
 
     /**
-     * public BarConnector(IP ADDRESS){
+     * public BarConnector(IP ADDRESS, API KEY){
      *     
      * }
      */
