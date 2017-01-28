@@ -32,9 +32,9 @@ public class Place implements Serializable{
 
     public String toJson(){
 
-        Gson gson = new Gson();
-
-        return gson.toJson(this);
+        return "{\"name\":\"" + name + "\",\"address\":\"" +
+                address + "\",\"lon\":" + Double.toString(lon) +
+                ",\"lat\":" + Double.toString(lat) + "}";
     }
 
     public String getName(){

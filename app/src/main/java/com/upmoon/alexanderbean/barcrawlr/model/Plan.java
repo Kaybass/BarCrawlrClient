@@ -45,8 +45,6 @@ public class Plan implements Serializable{
 
             places = new ArrayList<Place>();
 
-            Gson gson = new Gson();
-
             for(int i = 0; i < thePlaces.length(); i++){
 
                 JSONObject placeJSON = thePlaces.getJSONObject(i);
@@ -67,11 +65,9 @@ public class Plan implements Serializable{
 
         json += "{\"name\":\"" + name + "\",\"places\":[";
 
-        Gson gson = new Gson();
-
         for(int i = 0; i < numPlaces; i++){
 
-            json += gson.toJson(places.get(i)) + ",";
+            json += places.get(i).toJson() + ",";
         }
 
         json += "]}";

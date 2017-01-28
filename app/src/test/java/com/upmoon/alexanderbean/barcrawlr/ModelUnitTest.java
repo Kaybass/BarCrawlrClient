@@ -1,6 +1,5 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
-import com.google.gson.Gson;
 import com.upmoon.alexanderbean.barcrawlr.model.Place;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
@@ -51,8 +50,7 @@ public class ModelUnitTest {
         assertEquals("Alex's Plan",plan.getName());
         assertEquals(2,plan.getNumPlaces());
         assertEquals("Joe's Bar",plan.getPlace(0).getName());
-        //In the following test we make it such that the unicode apostrophes are replaced with ascii apostrophes
-        assertEquals(planJSON,plan.toJson().replace( "\\u0027","'"));
+        assertEquals(planJSON,plan.toJson());
 
     }
 
