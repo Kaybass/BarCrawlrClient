@@ -7,7 +7,11 @@ package com.upmoon.alexanderbean.barcrawlr.model;
  */
 
 /**
- *
+ * User is the object used to represent the
+ * users using the current plan
+ * "name" is a nick created by the user
+ * "lon" and "lat" are the user's coords
+ * @see com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers
  */
 public class User {
 

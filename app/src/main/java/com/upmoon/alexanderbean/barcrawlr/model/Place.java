@@ -1,7 +1,5 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
-import com.google.gson.Gson;
-
 import java.io.Serializable;
 
 /**
@@ -10,7 +8,11 @@ import java.io.Serializable;
 
 
 /**
- *
+ * Place is an object that represents the places
+ * users plan to go during a bar crawl.
+ * "name" is the name of the location
+ * "address" is the street address of the location
+ * "lon" and "lat" are the coords
  */
 public class Place implements Serializable{
 

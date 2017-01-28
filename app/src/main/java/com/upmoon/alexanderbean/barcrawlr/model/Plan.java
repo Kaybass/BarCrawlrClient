@@ -1,9 +1,5 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +14,12 @@ import java.util.ArrayList;
 
 
 /**
- *
+ * Plan is the object that the client uses
+ * to organize their bar crawling experience
+ * "name" is the name of the plan (i.e "Bob's Birthday")
+ * "places" are the locations that are in the plan
+ * @see Place
+ * @see com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan
  */
 public class Plan implements Serializable{
 
