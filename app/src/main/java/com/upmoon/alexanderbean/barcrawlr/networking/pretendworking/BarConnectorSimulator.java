@@ -10,6 +10,8 @@ import com.upmoon.alexanderbean.barcrawlr.networking.Connector;
 
 public class BarConnectorSimulator implements Connector {
 
+    User[] pretendUsers = {new User("Bob", 24,24), new User("Joe", 26,26)};
+
     public BarConnectorSimulator(){
 
     }
@@ -53,7 +55,7 @@ public class BarConnectorSimulator implements Connector {
      */
     @Override
     public String sendCode(String code) {
-        return null;
+        return "{\"status\":\"success\"}";
     }
 
     /**
@@ -67,7 +69,8 @@ public class BarConnectorSimulator implements Connector {
      */
     @Override
     public String locationUpdate(User self) {
-        return null;
+        return "{\"status:\"success\",\"\"users\":[" + self.toJson() +
+                "," + pretendUsers[0].toJson() + "," + pretendUsers[1].toJson() + "]}";
     }
 
     /**

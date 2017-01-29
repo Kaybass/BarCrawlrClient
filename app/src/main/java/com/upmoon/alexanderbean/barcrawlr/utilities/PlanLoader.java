@@ -5,4 +5,10 @@ package com.upmoon.alexanderbean.barcrawlr.utilities;
  */
 
 public class PlanLoader {
+
+    public PlanLoader(){
+
+    }
+
+
 }
