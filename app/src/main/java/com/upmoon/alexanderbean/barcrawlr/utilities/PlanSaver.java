@@ -61,6 +61,6 @@ public class PlanSaver {
             e.printStackTrace();
         }
 
-        return savePath + File.separator + planName;
+        return planName;
     }
 }

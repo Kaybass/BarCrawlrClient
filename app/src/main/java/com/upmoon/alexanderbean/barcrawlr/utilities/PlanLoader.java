@@ -26,7 +26,16 @@ public class PlanLoader {
     }
 
     public String[] getPlans(){
-        return null;
+
+        String savePath = mContext.getFilesDir().getAbsolutePath() + File.separator + SAVE_DIRECTORY_NAME;
+
+        File saveFolder = new File(savePath);
+
+        if(!saveFolder.exists()){
+            return new String[]{""};
+        }else{
+            return saveFolder.list();
+        }
     }
 
     public Plan loadPlan(String planName){
@@ -41,14 +50,14 @@ public class PlanLoader {
 
         String[] saves = saveFolder.list();
 
-        if(Arrays.asList(saves).contains(planName)){
-            return null;
+        if(!Arrays.asList(saves).contains(planName)){
+            return new Plan();
         }
 
         File loadFile = new File(savePath + File.separator + planName);
 
         try{
-            FileInputStream fis = new FileInputStream(saveFolder);
+            FileInputStream fis = new FileInputStream(loadFile);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Plan plan = (Plan) ois.readObject();
 

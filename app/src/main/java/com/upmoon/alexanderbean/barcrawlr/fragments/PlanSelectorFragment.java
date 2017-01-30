@@ -2,9 +2,9 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,33 @@ import com.upmoon.alexanderbean.barcrawlr.R;
  */
 public class PlanSelectorFragment extends Fragment {
 
+    FloatingActionButton mLeftFAB;
 
+    private final String planJSON = "{" +
+            "\"name\":\"AlexPlan\"," +
+            "\"places\":[" +
+            "{" +
+            "\"name\":\"Joe's Bar\"," +
+            "\"address\":\"10 King's Street, Burlington, 05401 VT\"," +
+            "\"lon\":0.0," +
+            "\"lat\":0.0" +
+            "}," +
+            "{" +
+            "\"name\":\"Bob's Bar\"," +
+            "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
+            "\"lon\":0.1," +
+            "\"lat\":0.1" +
+            "}," +
+            "]" +
+            "}";
+
+
+    public PlanSelectorFragment() { }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,6 +52,13 @@ public class PlanSelectorFragment extends Fragment {
         /**
          * Widgets here
          */
+        mLeftFAB = (FloatingActionButton) v.findViewById(R.id.connect_fab);
+        mLeftFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return v;
     }

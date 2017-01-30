@@ -27,7 +27,7 @@ public class Plan implements Serializable{
 
     private ArrayList<Place> places;
 
-    private transient int numPlaces;
+    private int numPlaces;
 
     public Plan(){
 

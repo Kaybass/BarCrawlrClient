@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
+import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
 
 import org.junit.Test;
@@ -36,19 +37,11 @@ public class PlanSaveAndLoadTest {
             "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
             "\"lon\":0.1," +
             "\"lat\":0.1" +
-            "}," +
+            "}" +
             "]" +
             "}";
 
     private final String SAVE_DIRECTORY_NAME = "plans";
-
-    @Test
-    public void useAppContext() throws Exception {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("com.upmoon.alexanderbean.barcrawlr", appContext.getPackageName());
-    }
 
     @Test
     public void planSaveTest() throws Exception{
@@ -58,20 +51,32 @@ public class PlanSaveAndLoadTest {
 
         PlanSaver ps = new PlanSaver(appContext);
 
-        String p = ps.savePlan(myPlan);
+        String myFile = ps.savePlan(myPlan);
 
-        assertEquals("AlexPlan",appContext.getFilesDir().getAbsolutePath() +
-                File.separator + SAVE_DIRECTORY_NAME + File.separator + myPlan.getName());
 
         File thingIJustSaved = new File(appContext.getFilesDir().getAbsolutePath() +
-                File.separator + SAVE_DIRECTORY_NAME + File.separator + myPlan.getName());
+                File.separator + SAVE_DIRECTORY_NAME + File.separator + myFile);
 
         assertEquals(true,thingIJustSaved.exists());
     }
 
     @Test
     public void planLoadTest() throws Exception{
+        Context appContext = InstrumentationRegistry.getTargetContext();
 
+        Plan myPlan;
+
+        PlanLoader pl = new PlanLoader(appContext);
+
+        String[] s = pl.getPlans();
+
+        assertEquals("AlexPlan.plan",s[0]);
+
+        myPlan = pl.loadPlan(s[0]);
+
+        assertEquals("AlexPlan",myPlan.getName());
+
+        assertEquals(2,myPlan.getNumPlaces());
     }
 
 }
