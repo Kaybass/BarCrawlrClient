@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:weightSum="1">
 
+    <TextView
+        android:text="name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/plan_holder_plan_name" />
+    <TextView
+        android:text="date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/plan_holder_create_date"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black"/>
 </LinearLayout>

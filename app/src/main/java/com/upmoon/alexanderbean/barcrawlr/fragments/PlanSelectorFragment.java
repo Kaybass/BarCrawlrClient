@@ -4,37 +4,34 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PlanSelectorFragment extends Fragment {
 
-    FloatingActionButton mLeftFAB;
+    /**
+     * Member variables
+     */
+    FloatingActionButton mLeftFAB, mRightFAB;
 
-    private final String planJSON = "{" +
-            "\"name\":\"AlexPlan\"," +
-            "\"places\":[" +
-            "{" +
-            "\"name\":\"Joe's Bar\"," +
-            "\"address\":\"10 King's Street, Burlington, 05401 VT\"," +
-            "\"lon\":0.0," +
-            "\"lat\":0.0" +
-            "}," +
-            "{" +
-            "\"name\":\"Bob's Bar\"," +
-            "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
-            "\"lon\":0.1," +
-            "\"lat\":0.1" +
-            "}," +
-            "]" +
-            "}";
+    private ArrayList<File> mPlans;
+
+    private RecyclerView mRecyclerView;
+    private PlanAdapter  mAdapter;
 
 
     public PlanSelectorFragment() { }
@@ -60,17 +57,62 @@ public class PlanSelectorFragment extends Fragment {
             }
         });
 
+        mRightFAB = (FloatingActionButton) v.findViewById(R.id.connect_fab);
+        mRightFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        //RecyclerView
+        mAdapter = new PlanAdapter();
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.gol_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
+                                        LinearLayoutManager.VERTICAL,false));
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        /**
+         * Load in plan data
+         */
+
+        PlanLoader pl = new PlanLoader(getActivity());
+        mPlans = new ArrayList<File>(Arrays.asList(pl.getPlans()));
+        mAdapter.notifyDataSetChanged();
+
         return v;
     }
 
-    private class PlanHolder extends RecyclerView.ViewHolder{
+
+    /**
+     * @TODO write onclicklistener for holder
+     */
+    private class PlanHolder extends RecyclerView.ViewHolder
+                        implements View.OnClickListener{
+
+        private TextView planName, planLastAccessDate;
 
         public PlanHolder(View itemView){
-
             super(itemView);
+            itemView.setOnClickListener(this);
+
+            planName = (TextView) itemView.findViewById(R.id.plan_holder_plan_name);
+
+            planLastAccessDate = (TextView) itemView.findViewById(R.id.plan_holder_create_date);
         }
 
         public void bindPlan(int pos){
+
+            File plan = mPlans.get(pos);
+
+            planName.setText(plan.getName());
+            planLastAccessDate.setText(plan.getAbsolutePath());
+
+        }
+
+        @Override
+        public void onClick(View v){
 
         }
     }
@@ -93,7 +135,7 @@ public class PlanSelectorFragment extends Fragment {
 
         @Override
         public int getItemCount(){
-            return 0;
+            return mPlans.size();
         }
     }
 

@@ -25,16 +25,17 @@ public class PlanLoader {
         mContext = context;
     }
 
-    public String[] getPlans(){
+    public File[] getPlans(){
 
         String savePath = mContext.getFilesDir().getAbsolutePath() + File.separator + SAVE_DIRECTORY_NAME;
 
         File saveFolder = new File(savePath);
 
         if(!saveFolder.exists()){
-            return new String[]{""};
+            saveFolder.mkdirs();
+            return new File[] {};
         }else{
-            return saveFolder.list();
+            return saveFolder.listFiles();
         }
     }
 

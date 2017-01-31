@@ -60,6 +60,10 @@ public class PlanSaveAndLoadTest {
         assertEquals(true,thingIJustSaved.exists());
     }
 
+
+    /**
+     * This test requires planSaveTest to have already run
+     */
     @Test
     public void planLoadTest() throws Exception{
         Context appContext = InstrumentationRegistry.getTargetContext();
@@ -68,15 +72,17 @@ public class PlanSaveAndLoadTest {
 
         PlanLoader pl = new PlanLoader(appContext);
 
-        String[] s = pl.getPlans();
+        File[] s = pl.getPlans();
 
-        assertEquals("AlexPlan.plan",s[0]);
+        assertEquals("AlexPlan.plan",s[0].getName());
 
-        myPlan = pl.loadPlan(s[0]);
+        myPlan = pl.loadPlan(s[0].getName());
 
         assertEquals("AlexPlan",myPlan.getName());
 
         assertEquals(2,myPlan.getNumPlaces());
+
+        assertEquals("Joe's Bar",myPlan.getPlace(0).getName());
     }
 
 }

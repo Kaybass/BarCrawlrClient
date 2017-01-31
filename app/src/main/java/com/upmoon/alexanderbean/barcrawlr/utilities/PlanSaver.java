@@ -40,7 +40,7 @@ public class PlanSaver {
 
         String planName;
 
-        if(Arrays.asList(otherSaves).contains(p.getName())){
+        if(Arrays.asList(otherSaves).contains(p.getName() + ".plan")){
             planName = p.getName() + "1" + ".plan";
         } else {
             planName = p.getName() + ".plan";

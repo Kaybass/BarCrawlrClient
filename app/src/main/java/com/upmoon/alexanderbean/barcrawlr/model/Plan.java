@@ -92,4 +92,15 @@ public class Plan implements Serializable{
             return null;
         }
     }
+
+    /**
+     * setName
+     * @param name
+     *
+     * This exists in the case that there is already a
+     * plan saved under the plan's name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 }
