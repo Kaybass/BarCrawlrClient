@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,6 +18,7 @@ import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -39,6 +43,7 @@ public class PlanSelectorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -84,6 +89,36 @@ public class PlanSelectorFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater mi){
+
+        super.onCreateOptionsMenu(menu,mi);
+
+        mi.inflate(R.menu.menu_plan_selector,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        switch (item.getItemId()){
+
+            //ABOUT
+            case R.id.plan_selector_about:
+                return true;
+
+            //HELP
+            case R.id.plan_selector_help:
+                return true;
+
+            //SETTINGS
+            case R.id.plan_selector_settings:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     /**
      * @TODO write onclicklistener for holder
@@ -107,7 +142,10 @@ public class PlanSelectorFragment extends Fragment {
             File plan = mPlans.get(pos);
 
             planName.setText(plan.getName());
-            planLastAccessDate.setText(plan.getAbsolutePath());
+
+            String date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(plan.lastModified());
+
+            planLastAccessDate.setText(date);
 
         }
 
