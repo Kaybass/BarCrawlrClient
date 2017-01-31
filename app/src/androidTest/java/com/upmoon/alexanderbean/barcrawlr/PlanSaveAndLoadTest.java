@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class PlanSaveAndLoadTest {
 
     private final String planJSON = "{" +
-            "\"name\":\"AlexPlan\"," +
+            "\"name\":\"Alex's Plan\"," +
             "\"places\":[" +
             "{" +
             "\"name\":\"Joe's Bar\"," +

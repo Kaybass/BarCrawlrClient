@@ -40,11 +40,9 @@ public class PlanSaver {
 
         String planName;
 
-        if(Arrays.asList(otherSaves).contains(p.getName() + ".plan")){
-            planName = p.getName() + "1" + ".plan";
-        } else {
-            planName = p.getName() + ".plan";
-        }
+
+        planName = p.getName() + ".plan";
+
 
         File saveFile = new File(savePath + File.separator + planName);
 

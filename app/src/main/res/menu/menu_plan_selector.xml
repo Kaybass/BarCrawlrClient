@@ -8,4 +8,6 @@
         android:id="@+id/plan_selector_help" />
     <item android:title="About"
         android:id="@+id/plan_selector_about" />
+    <item android:title="Legal"
+        android:id="@+id/plan_selector_legal" />
 </menu>

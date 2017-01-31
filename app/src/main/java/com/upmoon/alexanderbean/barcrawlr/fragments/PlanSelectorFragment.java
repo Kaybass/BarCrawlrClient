@@ -4,6 +4,7 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,6 +104,18 @@ public class PlanSelectorFragment extends Fragment {
 
         switch (item.getItemId()){
 
+            //legal
+            case R.id.plan_selector_legal:
+                AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
+
+                build.setMessage(R.string.mit_license_message);
+
+                AlertDialog diag = build.create();
+
+                diag.show();
+
+                return true;
+
             //ABOUT
             case R.id.plan_selector_about:
                 return true;
@@ -141,9 +155,11 @@ public class PlanSelectorFragment extends Fragment {
 
             File plan = mPlans.get(pos);
 
-            planName.setText(plan.getName());
+            planName.setText(plan.getName().replace(".plan",""));
 
-            String date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(plan.lastModified());
+            String date = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US).format(plan.lastModified());
+
+            date = "Last Modified: " + date;
 
             planLastAccessDate.setText(date);
 
