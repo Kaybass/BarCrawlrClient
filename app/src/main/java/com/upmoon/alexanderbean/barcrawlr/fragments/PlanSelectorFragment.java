@@ -1,6 +1,8 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
+import com.upmoon.alexanderbean.barcrawlr.PlanCreator;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,13 +31,11 @@ import java.util.Locale;
  * A simple {@link Fragment} subclass.
  */
 public class PlanSelectorFragment extends Fragment {
-
     /**
      * Member variables
      */
-    FloatingActionButton mLeftFAB, mRightFAB;
-
     private ArrayList<File> mPlans;
+    FloatingActionButton mLeftFAB, mRightFAB;
 
     private RecyclerView mRecyclerView;
     private PlanAdapter  mAdapter;
@@ -68,7 +69,8 @@ public class PlanSelectorFragment extends Fragment {
         mRightFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(),PlanCreator.class);
+                startActivity(intent);
             }
         });
 
@@ -135,7 +137,7 @@ public class PlanSelectorFragment extends Fragment {
 
 
     /**
-     * @TODO write onclicklistener for holder
+     * @TODO write onClickListener for holder
      */
     private class PlanHolder extends RecyclerView.ViewHolder
                         implements View.OnClickListener{
