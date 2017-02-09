@@ -7,6 +7,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_place">Add Place</string>
     <string name="mit_license_message">Copyright (c) 2016 Alexander Bean Apmann, Joseph Listro\n\n
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
