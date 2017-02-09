@@ -37,19 +37,16 @@ public class PlaceListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_place_list, container, false);
-    }
+        View v = inflater.inflate(R.layout.fragment_place_list, container, false);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        final Button addPlaceButton = (Button) getActivity().findViewById(R.id.add_place_button);
+        final Button addPlaceButton = (Button) v.findViewById(R.id.add_place_button);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onPickButtonClick(v);
             }
         });
+
+        return v;
     }
 
     @Override
