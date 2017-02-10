@@ -22,7 +22,7 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class PlaceListFragment extends Fragment {
-    private static final int PLACE_PICKER_REQUEST = 2;
+    private static final int PLACE_PICKER_REQUEST = 1;
 
     /*
     *   Update: added place picker button
