@@ -9,4 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
+
+    <Button
+        android:id="@+id/add_people_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/add_people"/>
+
+    <Button
+        android:id="@+id/publish_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/publish"/>
 </FrameLayout>
