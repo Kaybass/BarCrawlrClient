@@ -1,13 +1,17 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
 
 
@@ -23,7 +27,28 @@ public class PeopleListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_people_list, container, false);
+        View v =  inflater.inflate(R.layout.fragment_people_list, container, false);
+
+        final Button addPeopleButton = (Button) v.findViewById(R.id.add_people_button);
+        addPeopleButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Feature not yet implemented", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        /*
+        final Button publishButton = (Button) v.findViewById(R.id.publish_button);
+        publishButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.replace(R.id.main_content, new BarCrawler());
+                transaction.commit();
+            }
+        });
+        */
+
+        return v;
     }
 
 }
