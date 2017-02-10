@@ -5,11 +5,17 @@
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.PlaceListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
     <Button
         android:id="@+id/add_place_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@string/add_place"/>
 
 </FrameLayout>
