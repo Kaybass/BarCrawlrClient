@@ -7,6 +7,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Welcome to Bar Crawlr!</string>
+    <string name="selectPlan">Select an existing crawl to modify or create a new one.</string>
     <string name="add_place">Add Place</string>
     <string name="mit_license_message">Copyright (c) 2016 Alexander Bean Apmann, Joseph Listro\n\n
 
