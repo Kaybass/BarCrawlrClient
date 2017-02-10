@@ -47,7 +47,7 @@ public class MapFragment extends SupportMapFragment {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-                updateUI();
+                //updateUI();
             }
         });
     }
