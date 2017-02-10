@@ -5,12 +5,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,8 +13,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Place;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +27,7 @@ public class MapFragment extends SupportMapFragment {
     private GoogleMap mMap;
     private Location mCurrentLocation;
     private Place mPlace;
+    List<Place> mPlacesList = null;
 
     public MapFragment() {
         // Required empty public constructor
@@ -83,5 +80,6 @@ public class MapFragment extends SupportMapFragment {
         CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds,0);
         mMap.animateCamera(update);
     }
+
 
 }
