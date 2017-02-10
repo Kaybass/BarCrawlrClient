@@ -53,7 +53,7 @@ public class PlaceListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, getActivity());
+                Place place = PlacePicker.getPlace(getActivity(),data);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
             }
@@ -71,9 +71,9 @@ public class PlaceListFragment extends Fragment {
             startActivityForResult(intent, PLACE_PICKER_REQUEST);
 
         } catch (GooglePlayServicesRepairableException e) {
-            // ...
+            Toast.makeText(getActivity(), "Google Play Services Repairable Exception", Toast.LENGTH_LONG).show();
         } catch (GooglePlayServicesNotAvailableException e) {
-            // ...
+            Toast.makeText(getActivity(), "Google Play Services Not Available", Toast.LENGTH_LONG).show();
         }
     }
 

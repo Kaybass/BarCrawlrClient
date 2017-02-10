@@ -5,7 +5,9 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,7 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.upmoon.alexanderbean.barcrawlr.model.Place;
+import com.upmoon.alexanderbean.barcrawlr.R;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import java.util.List;
  */
 public class MapFragment extends SupportMapFragment {
     private static final String TAG = "MapFragment";
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     //private GoogleApiClient mClient;
     private GoogleMap mMap;
@@ -72,7 +75,7 @@ public class MapFragment extends SupportMapFragment {
             return;
         }
 
-        LatLng pPlace = new LatLng(mPlace.getLat(), mPlace.getLon());
+        LatLng pPlace = mPlace.getLatLng();
         LatLng myPlace = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
 
         LatLngBounds bounds = new LatLngBounds.Builder().include(pPlace).include(myPlace).build();
@@ -80,6 +83,5 @@ public class MapFragment extends SupportMapFragment {
         CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds,0);
         mMap.animateCamera(update);
     }
-
 
 }
