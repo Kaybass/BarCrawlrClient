@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PeopleListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlaceListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanSelectorFragment;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
@@ -69,8 +70,7 @@ public class PlanCreator extends AppCompatActivity {
                     case 1:
                         return new PlaceListFragment();
                     case 2:
-                        // TODO: Create ShareFragment to share new plan with other users
-                        // return new ShareFragment();
+                        return new PeopleListFragment();
                 }
                 return new MapFragment();
             }
