@@ -22,6 +22,13 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class PlaceListFragment extends Fragment {
+    private static final int PLACE_PICKER_REQUEST = 1;
+
+    /*
+    *   Update: added place picker button
+    *   TODO: add places list to aggregate all places for the plan
+    */
+    
     public PlaceListFragment() {
         // Required empty public constructor
     }
