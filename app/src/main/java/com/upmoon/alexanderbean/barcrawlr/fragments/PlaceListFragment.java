@@ -14,7 +14,10 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.model.Plan;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -56,6 +59,19 @@ public class PlaceListFragment extends Fragment {
                 Place place = PlacePicker.getPlace(getActivity(),data);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
+
+                /** Add place to placeList **/
+                // Convert Google Place to our Place.
+                LatLng latLng = place.getLatLng();
+                // Create ourPlace Place object
+                com.upmoon.alexanderbean.barcrawlr.model.Place ourPlace =
+                        new com.upmoon.alexanderbean.barcrawlr.model.Place(
+                                place.getName().toString(),
+                                place.getAddress().toString(),
+                                latLng.longitude,
+                                latLng.latitude);
+                // Add ourPlace (new place) to current plan.
+                CurrentPlan.getInstance().addPlaceToPlan(ourPlace);
             }
         }
     }
