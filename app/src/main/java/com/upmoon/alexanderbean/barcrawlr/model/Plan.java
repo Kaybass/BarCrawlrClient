@@ -93,6 +93,11 @@ public class Plan implements Serializable{
         }
     }
 
+    public void addPlace(Place place) {
+        places.add(place);
+        return;
+    }
+
     /**
      * setName
      * @param name
