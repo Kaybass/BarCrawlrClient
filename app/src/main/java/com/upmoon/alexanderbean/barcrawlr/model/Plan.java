@@ -27,10 +27,11 @@ public class Plan implements Serializable{
 
     private ArrayList<Place> places;
 
-    private int numPlaces;
+    private int numPlaces = 0;
 
     public Plan(){
-
+        name = "Plan not initialized properly";
+        places = new ArrayList<>();
     }
 
     public Plan(String json){
@@ -42,9 +43,7 @@ public class Plan implements Serializable{
 
             JSONArray thePlaces = plan.getJSONArray("places");
 
-            numPlaces = thePlaces.length();
-
-            places = new ArrayList<Place>();
+            places = new ArrayList<>();
 
             for(int i = 0; i < thePlaces.length(); i++){
 
@@ -95,7 +94,7 @@ public class Plan implements Serializable{
 
     public void addPlace(Place place) {
         places.add(place);
-        return;
+        numPlaces++;
     }
 
     /**
