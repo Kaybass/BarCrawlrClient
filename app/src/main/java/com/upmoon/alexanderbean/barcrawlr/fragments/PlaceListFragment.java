@@ -7,7 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -16,7 +18,6 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.upmoon.alexanderbean.barcrawlr.R;
-import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 
 import static android.app.Activity.RESULT_OK;
@@ -26,11 +27,11 @@ import static android.app.Activity.RESULT_OK;
  */
 public class PlaceListFragment extends Fragment {
     private static final int PLACE_PICKER_REQUEST = 1;
+    private int PLACES_EMPTY = 0;
 
-    /*
-    *   Update: added place picker button
-    *   TODO: add places list to aggregate all places for the plan
-    */
+    // Define variables for the places' ListView and its corresponding ArrayAdapter.
+    private ListView placesListView;
+    private ArrayAdapter<String> placesArrayAdapter;
     
     public PlaceListFragment() {
         // Required empty public constructor
@@ -39,9 +40,29 @@ public class PlaceListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment.
         View v = inflater.inflate(R.layout.fragment_place_list, container, false);
 
+        // Initialize placesListView
+        placesListView = (ListView) getActivity().findViewById(R.id.places_list_view);
+
+        // If the CurrentPlan contains any places, load them into placesListView
+        if (CurrentPlan.getInstance().getNumPlaces() > 0) {
+            // Initialize placesArrayAdapter.
+            placesArrayAdapter = new ArrayAdapter<>(
+                    getActivity(),
+                    android.R.layout.simple_expandable_list_item_1,
+                    CurrentPlan.getInstance().getPlacesNames());
+            // Set placesListView adapter to placesArrayAdapter.
+            placesListView.setAdapter(placesArrayAdapter);
+        } else {
+            // If not, placesArrayAdapter must be initialized
+            //  when the first Place is added to the CurrentPlan.
+            // Set the flag to initialize placesArrayAdapter
+            PLACES_EMPTY = 1;
+        }
+
+        // Initialize the addPlaceButton.
         final Button addPlaceButton = (Button) v.findViewById(R.id.add_place_button);
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -49,6 +70,7 @@ public class PlaceListFragment extends Fragment {
             }
         });
 
+        // Return the inflated layout for the fragment.
         return v;
     }
 
@@ -72,6 +94,36 @@ public class PlaceListFragment extends Fragment {
                                 latLng.latitude);
                 // Add ourPlace (new place) to current plan.
                 CurrentPlan.getInstance().addPlaceToPlan(ourPlace);
+
+                // If there were no places in the CurrentPlan, placesArrayAdapter must be initialized and set here
+                if (PLACES_EMPTY == 1) {
+                    // Initialize placesListView
+                    placesListView = (ListView) getActivity().findViewById(R.id.places_list_view);
+                    // Initialize placesArrayAdapter here.
+                    placesArrayAdapter = new ArrayAdapter<>(
+                            getActivity(),
+                            android.R.layout.simple_list_item_1,
+                            CurrentPlan.getInstance().getPlacesNames());
+
+                    // Set placesListView adapter to placesArrayAdapter.
+                    placesListView.setAdapter(placesArrayAdapter);
+                    // The ListView is no longer empty, reset the flag.
+                    PLACES_EMPTY = 0;
+                } else {
+                    // If not, update placesArrayAdapter.
+
+                    /** Couldn't get ArrayAdapter.notifyDataSetChanged() to work **/
+                    //placesArrayAdapter.notifyDataSetChanged();
+
+                    /** Alt method that recreates the ArrayAdapter. It works, but with a lot of garbage and wastes resources **/
+                    placesArrayAdapter = new ArrayAdapter<>(
+                    getActivity(),
+                            android.R.layout.simple_list_item_1,
+                            CurrentPlan.getInstance().getPlacesNames());
+
+                    // Set placesListView adapter to placesArrayAdapter.
+                    placesListView.setAdapter(placesArrayAdapter);
+                }
             }
         }
     }
