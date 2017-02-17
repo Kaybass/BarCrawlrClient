@@ -2,11 +2,11 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,18 +15,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.upmoon.alexanderbean.barcrawlr.R;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.android.gms.location.LocationServices.API;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends SupportMapFragment {
     private static final String TAG = "MapFragment";
-    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
-    //private GoogleApiClient mClient;
+    private GoogleApiClient mClient;
     private GoogleMap mMap;
     private Location mCurrentLocation;
     private Place mPlace;
@@ -41,47 +45,66 @@ public class MapFragment extends SupportMapFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //mClient = new GoogleApiClient.Builder(getActivity()).build();
+        mClient = new GoogleApiClient.Builder(getActivity()).addApi(API).build();
 
         getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
-                //updateUI();
+                updateUI(mMap);
             }
         });
     }
 
-    private class SearchTask extends AsyncTask<Location,Void,Void> {
-        private Location mLocation;
-
-        @Override
-        protected Void doInBackground(Location... params) {
-            mLocation = params[0];
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            mCurrentLocation = mLocation;
-
-            updateUI();
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser) {
+            updateUI(mMap);
         }
     }
 
-    private void updateUI() {
+    private void updateUI(GoogleMap map) {
         if (mMap == null) {
             return;
         }
 
-        LatLng pPlace = mPlace.getLatLng();
-        LatLng myPlace = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+        try {
+            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mClient);
+        } catch(SecurityException e) {
+            System.out.print(TAG + " : Unable to retrieve CurrentLocation.");
+        }
 
-        LatLngBounds bounds = new LatLngBounds.Builder().include(pPlace).include(myPlace).build();
+        if((mCurrentLocation != null) || (CurrentPlan.getInstance().getNumPlaces() != 0)) {
+            // Create an ArrayList to hold the Markers
+            ArrayList<Marker> markers = new ArrayList<>();
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds,0);
-        mMap.animateCamera(update);
+            if (mCurrentLocation != null) {
+                // Add a marker to the map at the client's Current Location
+                markers.add(map.addMarker(new MarkerOptions()
+                        .position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()))
+                        .title("Current Location")));
+                markers.get(0).setTag(0);
+            }
+
+            // Add a marker to the map at each Place in the Current Plan.
+            for (int i = 0; i < CurrentPlan.getInstance().getNumPlaces(); i++) {
+                markers.add(map.addMarker(new MarkerOptions()
+                        .position(new LatLng(CurrentPlan.getInstance().getPlace(i).getLat(), CurrentPlan.getInstance().getPlace(i).getLon()))
+                        .title(CurrentPlan.getInstance().getPlace(i).getName())));
+                markers.get(i).setTag(0);
+            }
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+            for (Marker marker : markers) {
+                builder.include(marker.getPosition());
+            }
+            LatLngBounds bounds = builder.build();
+
+            int padding = 15;    // Offset from the edge in pixels
+            CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            mMap.animateCamera(update);
+        }
     }
-
 }
