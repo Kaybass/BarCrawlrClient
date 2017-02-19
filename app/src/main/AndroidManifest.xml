@@ -37,7 +37,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/gmapskey"/>
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 314e048b87fd4c0af893871ec07fde11d3eba146
     </application>
 
 </manifest>
