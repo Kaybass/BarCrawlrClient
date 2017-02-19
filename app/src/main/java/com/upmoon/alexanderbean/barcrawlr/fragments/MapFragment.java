@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.google.android.gms.location.LocationServices.API;
 
@@ -33,8 +31,6 @@ public class MapFragment extends SupportMapFragment {
     private GoogleApiClient mClient;
     private GoogleMap mMap;
     private Location mCurrentLocation;
-    private Place mPlace;
-    List<Place> mPlacesList = null;
 
     public MapFragment() {
         // Required empty public constructor

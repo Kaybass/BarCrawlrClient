@@ -32,4 +32,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:10.0.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.json:json:20140107'
+    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.bignerdranch.android:expandablerecyclerview:1.0.3'
 }

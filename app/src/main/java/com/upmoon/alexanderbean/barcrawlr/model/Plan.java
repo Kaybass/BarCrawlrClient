@@ -92,6 +92,10 @@ public class Plan implements Serializable{
         }
     }
 
+    public ArrayList<Place> getPlaces() {
+        return places;
+    }
+
     public void addPlace(Place place) {
         places.add(place);
         numPlaces++;

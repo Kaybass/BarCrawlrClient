@@ -1,6 +1,8 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
+import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Alex on 1/21/2017.
@@ -14,11 +16,14 @@ import java.io.Serializable;
  * "address" is the street address of the location
  * "lon" and "lat" are the coords
  */
-public class Place implements Serializable{
+public class Place implements Serializable, ParentObject {
 
     private String name, address;
 
     private double lon, lat;
+
+    // A list for use with the RecyclerView in PlaceListFragment
+    private List<Object> mPlaceChildrenList;
 
     public Place(){
 
@@ -30,6 +35,11 @@ public class Place implements Serializable{
         this.address = address;
         this.lat = lat;
         this.lon = lon;
+    }
+
+    // A constructor for use with the RecyclerView in PlaceListFragment
+    public Place(List<Object> placeChildrenList) {
+        mPlaceChildrenList = placeChildrenList;
     }
 
     public String toJson(){
@@ -57,5 +67,15 @@ public class Place implements Serializable{
     public double getLat(){
 
         return lat;
+    }
+
+    @Override
+    public List<Object> getChildObjectList() {
+        return mPlaceChildrenList;
+    }
+
+    @Override
+    public void setChildObjectList(List<Object> list) {
+        mPlaceChildrenList = list;
     }
 }

@@ -3,6 +3,7 @@ package com.upmoon.alexanderbean.barcrawlr.singletons;
 import com.upmoon.alexanderbean.barcrawlr.model.Place;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +41,10 @@ public class CurrentPlan {
         } else {
             return null;
         }
+    }
+
+    public ArrayList<Place> getPlaces() {
+        return plan.getPlaces();
     }
 
     public int getNumPlaces() {
