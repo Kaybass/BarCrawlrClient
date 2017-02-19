@@ -23,24 +23,15 @@ public class CurrentPlan {
     }
 
     private CurrentPlan() {
-        plan = new Plan();
+
+    }
+
+    public void setPlan(Plan plan){
+        this.plan = plan;
     }
 
     public String getName() {
         return plan.getName();
-    }
-
-    public ArrayList<String> getPlacesNames() {
-        //return plan.getPlaces();
-        if (plan.getNumPlaces() > 0) {
-            ArrayList<String> places = new ArrayList<>();
-            for (int i = 0; i < this.getNumPlaces(); i++) {
-                places.add(this.getPlace(i).getName());
-            }
-            return places;
-        } else {
-            return null;
-        }
     }
 
     public ArrayList<Place> getPlaces() {
@@ -57,6 +48,5 @@ public class CurrentPlan {
 
     public void addPlaceToPlan(Place place) {
         plan.addPlace(place);
-        return;
     }
 }

@@ -3,6 +3,7 @@ package com.upmoon.alexanderbean.barcrawlr;
 import com.upmoon.alexanderbean.barcrawlr.model.Place;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 
 import org.junit.Test;
 
@@ -62,5 +63,21 @@ public class ModelUnitTest {
         assertEquals("Alex",user.getName());
 
         assertEquals("{\"name\":\"Alex\",\"lon\":0.0,\"lat\":0.0}",user.toJson());
+    }
+
+    @Test
+    public void plan_AddCorrect() throws Exception{
+
+        Plan plan = new Plan();
+
+        Place place = new Place("bingo","bango",1,2);
+
+        plan.addPlace(place);
+
+        assertEquals("bingo",plan.getPlace(0).getName());
+
+        CurrentPlan.getInstance().setPlan(plan);
+
+        assertEquals("bingo",CurrentPlan.getInstance().getPlace(0).getName());
     }
 }

@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.model.Plan;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 import com.upmoon.alexanderbean.barcrawlr.PlanCreator;
 
@@ -69,6 +71,7 @@ public class PlanSelectorFragment extends Fragment {
         mRightFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CurrentPlan.getInstance().setPlan(new Plan());
                 Intent intent = new Intent(getActivity(),PlanCreator.class);
                 startActivity(intent);
             }
