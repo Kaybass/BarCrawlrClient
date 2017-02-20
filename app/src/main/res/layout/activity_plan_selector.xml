@@ -21,11 +21,12 @@
         android:text="@string/selectPlan" />
 
     <TextView
+        android:id="@+id/no_plans_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_gravity="center"
-        android:text=":( No plans, make a new one!" />
+        android:text="@string/no_plans" />
 
 
 </FrameLayout>
