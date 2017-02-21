@@ -3,6 +3,7 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
@@ -198,4 +200,23 @@ public class PlanSelectorFragment extends Fragment {
         }
     }
 
+    private class GetPlan extends AsyncTask<String,String,String> {
+
+        private Context context;
+
+        public GetPlan(Context context){
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... meme){
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String str){
+            Toast.makeText(context, "Disconnected",Toast.LENGTH_SHORT).show();
+        }
+    }
 }

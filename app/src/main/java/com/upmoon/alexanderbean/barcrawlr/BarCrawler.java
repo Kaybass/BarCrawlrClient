@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.SettingsFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
 import java.util.UUID;
@@ -56,7 +56,7 @@ public class BarCrawler extends AppCompatActivity {
                     case 2:
                         return new PeopleListFragment();
                     case 3:
-                        return new SettingsFragment();
+                        return new OptionsFragment();
                 }
                 return new MapFragment();
             }
