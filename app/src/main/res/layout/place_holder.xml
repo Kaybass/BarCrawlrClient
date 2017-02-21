@@ -5,19 +5,17 @@
     android:background="#dbdbda">
 
     <TextView
-        android:id="@+id/parent_list_item_place_name_text_view"
+        android:id="@+id/place_holder_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textStyle="bold"
         android:text="Crime Title" />
 
-    <ImageButton
-        android:id="@+id/parent_list_item_expand_arrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_margin="8dp"
-        android:src="@android:drawable/arrow_down_float" />
+    <TextView
+        android:id="@+id/place_holder_address"
+        android:text="Address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

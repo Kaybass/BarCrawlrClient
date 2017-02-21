@@ -39,8 +39,6 @@ public class BarCrawler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_crawler);
 
-        UUID planName = (UUID) getIntent().getSerializableExtra(EXTRA_PLAN_NAME);
-
         mViewPager = (ViewPager) findViewById(R.id.container);
 
         planLoader = new PlanLoader(getApplicationContext());
