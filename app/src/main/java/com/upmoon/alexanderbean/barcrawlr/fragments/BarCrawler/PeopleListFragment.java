@@ -1,4 +1,4 @@
-package com.upmoon.alexanderbean.barcrawlr.fragments;
+package com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -3,7 +3,6 @@ package com.upmoon.alexanderbean.barcrawlr;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,9 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.PeopleListFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.PlaceListFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.SettingsFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.SettingsFragment;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
 import java.util.UUID;

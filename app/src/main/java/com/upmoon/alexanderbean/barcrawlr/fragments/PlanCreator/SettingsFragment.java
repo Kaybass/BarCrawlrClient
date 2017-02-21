@@ -1,4 +1,4 @@
-package com.upmoon.alexanderbean.barcrawlr.fragments;
+package com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator;
 
 
 import android.os.Bundle;
