@@ -202,10 +202,7 @@ public class PlanSelectorFragment extends Fragment {
 
     private class GetPlan extends AsyncTask<String,String,String> {
 
-        private Context context;
-
-        public GetPlan(Context context){
-            this.context = context;
+        public GetPlan(){
         }
 
         @Override
@@ -216,7 +213,7 @@ public class PlanSelectorFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String str){
-            Toast.makeText(context, "Disconnected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Disconnected",Toast.LENGTH_SHORT).show();
         }
     }
 }
