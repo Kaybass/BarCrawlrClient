@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#dbdbda">
 
     <TextView
@@ -10,12 +10,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textStyle="bold"
-        android:text="Crime Title" />
+        android:text="Place Name" />
 
     <TextView
         android:id="@+id/place_holder_address"
-        android:text="Address"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/place_holder_name"
+        android:text="Address" />
 
-</RelativeLayout>
+</LinearLayout>

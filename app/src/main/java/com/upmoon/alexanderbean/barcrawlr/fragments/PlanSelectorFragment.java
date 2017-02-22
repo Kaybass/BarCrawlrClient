@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.text.Text;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
@@ -30,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+
+import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,6 +97,17 @@ public class PlanSelectorFragment extends Fragment {
         PlanLoader pl = new PlanLoader(getActivity());
         mPlans = new ArrayList<File>(Arrays.asList(pl.getPlans()));
         mAdapter.notifyDataSetChanged();
+
+        if(mPlans.size() > 0)
+        {
+            TextView sectionLabel = (TextView) getActivity().findViewById(R.id.section_label);
+            TextView selectPlan = (TextView) getActivity().findViewById(R.id.select_plan);
+            TextView noPlans = (TextView) getActivity().findViewById(R.id.no_plans_text_view);
+
+            sectionLabel.setVisibility(GONE);
+            selectPlan.setVisibility(GONE);
+            noPlans.setVisibility(GONE);
+        }
 
         return v;
     }
@@ -175,6 +189,11 @@ public class PlanSelectorFragment extends Fragment {
         @Override
         public void onClick(View v){
 
+            // Load the clicked plan.
+
+            // Set the CurrentPlan to plan.
+
+            // Load the PlanCreator Fragment.
         }
     }
 
