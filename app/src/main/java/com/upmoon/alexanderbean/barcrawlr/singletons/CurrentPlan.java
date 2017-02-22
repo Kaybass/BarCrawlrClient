@@ -49,4 +49,8 @@ public class CurrentPlan {
     public void addPlaceToPlan(Place place) {
         plan.addPlace(place);
     }
+
+    public Plan getPlan() {
+        return plan;
+    }
 }

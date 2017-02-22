@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
 
 
 public class PeopleListFragment extends Fragment {
@@ -29,21 +30,7 @@ public class PeopleListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_people_list, container, false);
 
-        final Button addPeopleButton = (Button) v.findViewById(R.id.add_people_button);
-        addPeopleButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO: Add users to plan.
-                Toast.makeText(getActivity(), "Feature not yet implemented", Toast.LENGTH_LONG).show();
-            }
-        });
 
-        final Button publishButton = (Button) v.findViewById(R.id.publish_button);
-        publishButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO: Publish the plan.
-                Toast.makeText(getActivity(), "Feature not yet implemented", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         return v;
     }

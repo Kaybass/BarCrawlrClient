@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_marginTop="40pt"
-        android:text="@string/selectPlan" />
+        android:text="@string/select_plan" />
 
     <TextView
         android:id="@+id/no_plans_text_view"

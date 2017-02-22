@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
@@ -50,7 +51,7 @@ public class PlanCreator extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.addTab(mTabLayout.newTab().setText("Places"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Map"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("People"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Options"));
 
         FragmentManager fragmentmanager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentPagerAdapter(fragmentmanager) {
@@ -63,7 +64,7 @@ public class PlanCreator extends AppCompatActivity {
                     case 1:
                         return new MapFragment();
                     case 2:
-                        return new PeopleListFragment();
+                        return new OptionsFragment();
                 }
                 return new PlaceListFragment();
             }
