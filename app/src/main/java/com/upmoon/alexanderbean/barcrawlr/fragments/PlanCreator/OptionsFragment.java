@@ -32,10 +32,8 @@ public class OptionsFragment extends Fragment {
 
     private class AddPlan extends AsyncTask<String,String,String> {
 
-        private Context context;
+        public AddPlan(){
 
-        public AddPlan(Context context){
-            this.context = context;
         }
 
         @Override
@@ -46,7 +44,7 @@ public class OptionsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String str){
-            Toast.makeText(context, "Disconnected",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Disconnected",Toast.LENGTH_SHORT).show();
         }
     }
 }
