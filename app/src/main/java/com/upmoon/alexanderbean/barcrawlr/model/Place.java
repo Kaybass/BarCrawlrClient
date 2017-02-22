@@ -1,6 +1,5 @@
 package com.upmoon.alexanderbean.barcrawlr.model;
 
-import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
  * "address" is the street address of the location
  * "lon" and "lat" are the coords
  */
-public class Place implements Serializable, ParentObject {
+public class Place implements Serializable {
 
     private String name, address;
 
@@ -67,15 +66,5 @@ public class Place implements Serializable, ParentObject {
     public double getLat(){
 
         return lat;
-    }
-
-    @Override
-    public List<Object> getChildObjectList() {
-        return mPlaceChildrenList;
-    }
-
-    @Override
-    public void setChildObjectList(List<Object> list) {
-        mPlaceChildrenList = list;
     }
 }

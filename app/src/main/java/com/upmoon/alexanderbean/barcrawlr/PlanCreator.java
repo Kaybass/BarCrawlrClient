@@ -2,6 +2,7 @@ package com.upmoon.alexanderbean.barcrawlr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ public class PlanCreator extends AppCompatActivity {
     private static final String EXTRA_PLAN_NAME = "com.upmoon.alexanderbean.barcrawlr.plan_name";
 
     private ViewPager mViewPager;
+    private TabLayout mTabLayout;
     private PlanLoader planLoader;
 
     public static Intent newIntent(Context packageContext, UUID planName) {
@@ -44,6 +46,11 @@ public class PlanCreator extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
 
         planLoader = new PlanLoader(getApplicationContext());
+
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.addTab(mTabLayout.newTab().setText("Places"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Map"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("People"));
 
         FragmentManager fragmentmanager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentPagerAdapter(fragmentmanager) {

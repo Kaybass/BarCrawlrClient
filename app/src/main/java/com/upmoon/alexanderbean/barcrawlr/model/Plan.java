@@ -101,7 +101,6 @@ public class Plan implements Serializable{
     public void addPlace(Place place) {
         places.add(place);
         numPlaces = places.size();
-        //System.out.print(numPlaces);
     }
 
     /**
