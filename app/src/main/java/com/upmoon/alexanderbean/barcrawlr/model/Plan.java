@@ -67,7 +67,7 @@ public class Plan implements Serializable{
 
         json += "{\"name\":\"" + name + "\",\"places\":[";
 
-        for(int i = 0; i < numPlaces; i++){
+        for(int i = 0; i < numPlaces - 1; i++){
 
             json += places.get(i).toJson() + ",";
         }
