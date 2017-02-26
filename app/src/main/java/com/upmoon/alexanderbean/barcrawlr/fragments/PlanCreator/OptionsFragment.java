@@ -1,10 +1,9 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator;
 
-
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,14 @@ import android.widget.Toast;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
+import com.upmoon.alexanderbean.barcrawlr.R;
 
 import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OptionsFragment extends Fragment {
+public class OptionsFragment extends PreferenceFragmentCompat {
 
 
     public OptionsFragment() {
@@ -46,23 +46,13 @@ public class OptionsFragment extends Fragment {
             }
         });
 
-        final Button addPeopleButton = (Button) v.findViewById(R.id.add_people_button);
-        addPeopleButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO: Add users to plan.
-                Toast.makeText(getActivity(), "Feature not yet implemented", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        final Button publishButton = (Button) v.findViewById(R.id.publish_button);
-        publishButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // TODO: Publish the plan.
-                Toast.makeText(getActivity(), "Feature not yet implemented", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         return v;
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle bundle, String s) {
+        // Load the Preferences from the Layout resource
+        addPreferencesFromResource(R.xml.fragment_plan_creator_options);
     }
 
     private class AddPlan extends AsyncTask<JSONObject,String,String> {
