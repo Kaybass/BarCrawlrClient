@@ -15,6 +15,8 @@ import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
 
+import org.json.JSONObject;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -61,14 +63,14 @@ public class OptionsFragment extends Fragment {
         return v;
     }
 
-    private class AddPlan extends AsyncTask<String,String,String> {
+    private class AddPlan extends AsyncTask<JSONObject,String,String> {
 
         public AddPlan(){
 
         }
 
         @Override
-        protected String doInBackground(String... meme){
+        protected String doInBackground(JSONObject... meme){
 
             return "";
         }

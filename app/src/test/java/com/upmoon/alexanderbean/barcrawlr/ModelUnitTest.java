@@ -42,7 +42,7 @@ public class ModelUnitTest {
                 "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
                 "\"lon\":0.1," +
                 "\"lat\":0.1" +
-                "}," +
+                "}" +
                 "]" +
                 "}";
 

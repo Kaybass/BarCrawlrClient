@@ -37,7 +37,7 @@ public class NetworkingTest {
             "\"address\":\"11 King's Street, Burlington, 05401 VT\"," +
             "\"lon\":0.1," +
             "\"lat\":0.1" +
-            "}," +
+            "}" +
             "]" +
             "}";
 
@@ -55,7 +55,7 @@ public class NetworkingTest {
 
         String realResultStr = BC.sendPlan(plan,user);
 
-        assertEquals("keke",realResultStr);
+        //assertEquals("keke",realResultStr);
 
         JSONObject realResult = new JSONObject(realResultStr);
 
