@@ -30,7 +30,7 @@ public class Plan implements Serializable{
     private int numPlaces = 0;
 
     public Plan(){
-        name = "Plan not initialized properly";
+        name = "";
         places = new ArrayList<Place>();
     }
 

@@ -111,11 +111,11 @@ public class BarConnector implements Connector {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             InputStream in = connection.getInputStream();
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            /*if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new IOException(connection.getResponseMessage() +
                         ": with " +
                         address);
-            }
+            }*/
             int bytesRead = 0;
             byte[] buffer = new byte[1024];
             while ((bytesRead = in.read(buffer)) > 0) {

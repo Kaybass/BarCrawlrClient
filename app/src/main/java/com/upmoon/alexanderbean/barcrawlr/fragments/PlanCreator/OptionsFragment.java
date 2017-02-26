@@ -41,6 +41,8 @@ public class OptionsFragment extends Fragment {
 
                 planSaver.savePlan(CurrentPlan.getInstance().getPlan());
 
+                Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

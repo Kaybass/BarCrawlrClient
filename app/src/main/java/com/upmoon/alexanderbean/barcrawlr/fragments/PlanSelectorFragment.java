@@ -2,6 +2,7 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +11,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.vision.text.Text;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
@@ -32,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.View.GONE;
 
 /**
@@ -76,9 +84,49 @@ public class PlanSelectorFragment extends Fragment {
         mRightFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CurrentPlan.getInstance().setPlan(new Plan());
-                Intent intent = new Intent(getActivity(),PlanCreator.class);
-                startActivity(intent);
+
+                AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity());
+
+                final EditText inp = new EditText(getActivity());
+
+                inp.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                buildo.setTitle("Create New Plan");
+
+                buildo.setView(inp);
+
+                buildo.setPositiveButton("Create",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+
+                        PlanLoader pl = new PlanLoader(getActivity());
+
+                        String planName = inp.getText().toString();
+
+                        if(planName != "" && pl.planNameExists(planName)){
+                            Toast.makeText(getActivity(),"Invalid Name or name exists",Toast.LENGTH_SHORT);
+                        }
+                        else{
+
+                            Plan plan = new Plan();
+
+                            plan.setName(inp.getText().toString());
+
+                            CurrentPlan.getInstance().setPlan(plan);
+
+                            Intent intent = new Intent(getActivity(),PlanCreator.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+                buildo.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+
+                    }
+                });
+
+                buildo.show();
             }
         });
 
@@ -95,7 +143,7 @@ public class PlanSelectorFragment extends Fragment {
          */
 
         PlanLoader pl = new PlanLoader(getActivity());
-        mPlans = new ArrayList<File>(Arrays.asList(pl.getPlans()));
+        mPlans = new ArrayList<>(Arrays.asList(pl.getPlans()));
         mAdapter.notifyDataSetChanged();
 
         if(mPlans.size() > 0)
@@ -154,10 +202,35 @@ public class PlanSelectorFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
 
-    /**
-     * @TODO write onClickListener for holder
-     */
+            PlanListChanged();
+        }
+    }
+
+    private void PlanListChanged(){
+        PlanLoader pl = new PlanLoader(getActivity());
+        mPlans = new ArrayList<>(Arrays.asList(pl.getPlans()));
+        mAdapter.notifyDataSetChanged();
+
+        TextView sectionLabel = (TextView) getActivity().findViewById(R.id.section_label);
+        TextView selectPlan = (TextView) getActivity().findViewById(R.id.select_plan);
+        TextView noPlans = (TextView) getActivity().findViewById(R.id.no_plans_text_view);
+        if(mPlans.size() > 0)
+        {
+            sectionLabel.setVisibility(GONE);
+            selectPlan.setVisibility(GONE);
+            noPlans.setVisibility(GONE);
+        }
+        else{
+            sectionLabel.setVisibility(View.VISIBLE);
+            selectPlan.setVisibility(View.VISIBLE);
+            noPlans.setVisibility(View.VISIBLE);
+        }
+    }
+
     private class PlanHolder extends RecyclerView.ViewHolder
                         implements View.OnClickListener{
 
@@ -189,11 +262,14 @@ public class PlanSelectorFragment extends Fragment {
         @Override
         public void onClick(View v){
 
-            // Load the clicked plan.
+            PlanLoader pl = new PlanLoader(getActivity());
 
-            // Set the CurrentPlan to plan.
+            Log.d("PLAN CHOSEN",planName.getText().toString());
 
-            // Load the PlanCreator Fragment.
+            CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
+
+            Intent intent = new Intent(getActivity(),PlanCreator.class);
+            startActivity(intent);
         }
     }
 

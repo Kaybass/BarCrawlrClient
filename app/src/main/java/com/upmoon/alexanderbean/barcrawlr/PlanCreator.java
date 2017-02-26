@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class PlanCreator extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mViewPager.clearOnPageChangeListeners();
         mTabLayout.setupWithViewPager(mViewPager);
+
+        setTitle("Edit: " + CurrentPlan.getInstance().getName());
     }
 
 
