@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">Bar Crawlr</string>
-    <string name="title_activity_plan_creator">PlanCreator</string>
+    <string name="title_activity_bar_crawler">BarCrawler</string>
+    <string name="title_activity_plan_creator">Plan Creator</string>
+    <string name="title_activity_plan_selector">Plan Selector</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_bar_crawler">BarCrawler</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

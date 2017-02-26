@@ -3,37 +3,37 @@ package com.upmoon.alexanderbean.barcrawlr;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlanCreator extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private static final String EXTRA_PLAN_NAME = "com.upmoon.alexanderbean.barcrawlr.plan_name";
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private PlanLoader planLoader;
 
-    public static Intent newIntent(Context packageContext, UUID planName) {
+    public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, PlanCreator.class);
-        intent.putExtra(EXTRA_PLAN_NAME, planName);
         return intent;
     }
 
@@ -42,40 +42,21 @@ public class PlanCreator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan_creator);
 
-        UUID planName = (UUID) getIntent().getSerializableExtra(EXTRA_PLAN_NAME);
+        // Add Toolbar to Activity.
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        // Initialize the ViewPager.
         mViewPager = (ViewPager) findViewById(R.id.container);
 
-        planLoader = new PlanLoader(getApplicationContext());
+        if(mViewPager != null) {
+            setUpViewPager();
+        }
 
+        // Initialize the TabLayout.
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        mTabLayout.addTab(mTabLayout.newTab().setText("Places"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Map"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Options"));
-
-        FragmentManager fragmentmanager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentPagerAdapter(fragmentmanager) {
-
-            @Override
-            public Fragment getItem(int position) {
-                switch(position) {
-                    case 0:
-                        return new PlaceListFragment();
-                    case 1:
-                        return new MapFragment();
-                    case 2:
-                        return new OptionsFragment();
-                }
-                return new PlaceListFragment();
-            }
-
-            @Override
-            public int getCount() {
-                // There are three fragments(/pages) in the PlanCreator ViewPager
-                return 3;
-            }
-
-        });
+        mViewPager.clearOnPageChangeListeners();
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
 
@@ -92,4 +73,40 @@ public class PlanCreator extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setUpViewPager() {
+        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new PlaceListFragment(), "Places");
+        adapter.addFragment(new MapFragment(), "Map");
+        adapter.addFragment(new OptionsFragment(), "Options");
+        mViewPager.setAdapter(adapter);
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragments = new ArrayList<>();
+        private final List<String> fragmentTitles = new ArrayList<>();
+
+        public Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragments.add(fragment);
+            fragmentTitles.add(title);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitles.get(position);
+        }
+    }
 }
