@@ -105,7 +105,7 @@ public class BarConnector implements Connector {
         }
     }
 
-    public String barGet(String address) throws IOException {
+    private String barGet(String address) throws IOException {
         URL url = new URL(address);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         try {
@@ -128,7 +128,7 @@ public class BarConnector implements Connector {
         }
     }
 
-    public String barPost(String address, String plan) throws IOException {
+    private String barPost(String address, String plan) throws IOException {
         DefaultHttpClient dhc = new DefaultHttpClient();
 
         HttpPost post = new HttpPost(address);

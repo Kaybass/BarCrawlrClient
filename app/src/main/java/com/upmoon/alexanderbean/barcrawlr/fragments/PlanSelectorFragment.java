@@ -4,10 +4,15 @@ package com.upmoon.alexanderbean.barcrawlr.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,12 +28,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.text.Text;
+import android.location.LocationListener;
+
+import com.google.android.gms.location.LocationServices;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
+import com.upmoon.alexanderbean.barcrawlr.model.User;
+import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 import com.upmoon.alexanderbean.barcrawlr.PlanCreator;
@@ -55,6 +61,10 @@ public class PlanSelectorFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private PlanAdapter  mAdapter;
 
+    private double mLongitude, mLatitude;
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     public PlanSelectorFragment() { }
 
@@ -104,7 +114,7 @@ public class PlanSelectorFragment extends Fragment {
                         String planName = inp.getText().toString();
 
                         if(planName != "" && pl.planNameExists(planName)){
-                            Toast.makeText(getActivity(),"Invalid Name or name exists",Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(),"Invalid Name or name exists",Toast.LENGTH_SHORT).show();
                         }
                         else{
 
@@ -142,22 +152,32 @@ public class PlanSelectorFragment extends Fragment {
          * Load in plan data
          */
 
-        PlanLoader pl = new PlanLoader(getActivity());
-        mPlans = new ArrayList<>(Arrays.asList(pl.getPlans()));
-        mAdapter.notifyDataSetChanged();
+        PlanListChanged();
 
-        if(mPlans.size() > 0)
-        {
-            TextView sectionLabel = (TextView) getActivity().findViewById(R.id.section_label);
-            TextView selectPlan = (TextView) getActivity().findViewById(R.id.select_plan);
-            TextView noPlans = (TextView) getActivity().findViewById(R.id.no_plans_text_view);
+        /**
+         * location
+         */
 
-            sectionLabel.setVisibility(GONE);
-            selectPlan.setVisibility(GONE);
-            noPlans.setVisibility(GONE);
-        }
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                updateLocation(location.getLongitude(),location.getLatitude());
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
 
         return v;
+    }
+
+    public void updateLocation(double lon, double lat){
+        mLongitude = lon;
+        mLatitude = lat;
     }
 
     @Override
@@ -256,9 +276,12 @@ public class PlanSelectorFragment extends Fragment {
             date = "Last Modified: " + date;
 
             planLastAccessDate.setText(date);
-
         }
 
+
+        /*
+            TODO: ADD DELETE OPTION
+         */
         @Override
         public void onClick(View v){
 
@@ -295,13 +318,26 @@ public class PlanSelectorFragment extends Fragment {
         }
     }
 
-    private class GetPlan extends AsyncTask<String,String,String> {
+    private class GetPlan extends AsyncTask<String, Void,String> {
 
         public GetPlan(){
         }
 
         @Override
-        protected String doInBackground(String... meme){
+        protected String doInBackground(String... codeAndUserName){
+
+            BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
+                                            getActivity().getString(R.string.bcserverapikey));
+
+            if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+                ActivityCompat.requestPermissions( getActivity(), new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
+                        LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );
+            }
+
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+            bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
 
             return "";
         }

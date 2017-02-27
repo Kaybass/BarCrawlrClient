@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
 
@@ -65,14 +66,16 @@ public class OptionsFragment extends Fragment {
         return v;
     }
 
-    private class AddPlan extends AsyncTask<JSONObject,String,String> {
+    private class AddPlan extends AsyncTask<Void,Void,String> {
 
         public AddPlan(){
 
         }
 
         @Override
-        protected String doInBackground(JSONObject... meme){
+        protected String doInBackground(Void... meme){
+
+
 
             return "";
         }

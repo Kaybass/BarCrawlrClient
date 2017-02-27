@@ -1,6 +1,7 @@
 package com.upmoon.alexanderbean.barcrawlr.utilities;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 
@@ -31,7 +32,10 @@ public class PlanLoader {
 
         File saveFolder = new File(savePath);
 
+        name = name + ".plan";
+
         for(String each : saveFolder.list()){
+            Log.d("kek", each + " " + name);
             if(name == each){
                 return true;
             }
