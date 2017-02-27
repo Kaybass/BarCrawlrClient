@@ -11,10 +11,8 @@
     <string name="welcome">Welcome to Bar Crawlr!</string>
     <string name="select_plan">Select an existing crawl to modify or create a new one.</string>
     <string name="add_place">Add Place</string>
-    <string name="add_people">Add People to Crawl</string>
-    <string name="publish">Publish Crawl Plan</string>
     <string name="no_plans">:( No plans, make a new one!</string>
-    <string name="save_plan">Save Plan</string>
+    <string name="save_plan">Create Crawl</string>
     <string name="mit_license_message">Copyright (c) 2016 Alexander Bean Apmann, Joseph Listro\n\n
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
