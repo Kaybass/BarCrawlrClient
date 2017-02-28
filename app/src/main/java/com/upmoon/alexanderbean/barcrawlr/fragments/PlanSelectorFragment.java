@@ -1,6 +1,7 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -285,14 +287,57 @@ public class PlanSelectorFragment extends Fragment {
         @Override
         public void onClick(View v){
 
-            PlanLoader pl = new PlanLoader(getActivity());
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setTitle("Are you sure you want to delete your plan?")
+                    .setMessage("This action cannot be undone.")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface diag, int which) {
+                            // TODO: Delete the Plan
+                            PlanLoader pl = new PlanLoader(getActivity());
 
-            Log.d("PLAN CHOSEN",planName.getText().toString());
+                            pl.deletePlan(planName.getText().toString());
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface diag, int which) {
+                            diag.cancel();
+                        }
+                    }).setCancelable(true);
 
-            CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
+            final AlertDialog alertDialogConfirmation = builder.create();
 
-            Intent intent = new Intent(getActivity(),PlanCreator.class);
-            startActivity(intent);
+            final AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity())
+                    .setTitle(planName.getText().toString())
+                    .setView(getView())
+                    .setPositiveButton("Edit Plan",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface diag, int which){
+
+                            PlanLoader pl = new PlanLoader(getActivity());
+
+                            Log.d("PLAN CHOSEN",planName.getText().toString());
+
+                            CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
+
+                            Intent intent = new Intent(getActivity(),PlanCreator.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Delete",new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface diag, int which) {
+                            diag.dismiss();
+
+                            alertDialogConfirmation.show();
+                        }
+                    })
+                    .setCancelable(true);
+
+            AlertDialog editPlan = buildo.create();
+
+            editPlan.show();
         }
     }
 
@@ -331,8 +376,7 @@ public class PlanSelectorFragment extends Fragment {
 
             if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
-                ActivityCompat.requestPermissions( getActivity(), new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  },
-                        LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );
+                //ActivityCompat.requestPermissions( getActivity(), new String[] {  android.Manifest.permission.ACCESS_COARSE_LOCATION  }, LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION );
             }
 
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);

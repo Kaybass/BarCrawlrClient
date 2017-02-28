@@ -89,4 +89,15 @@ public class PlanLoader {
             return null;
         }
     }
+
+    public void deletePlan(String planName) {
+
+        String savePath = mContext.getFilesDir().getAbsolutePath() + File.separator + SAVE_DIRECTORY_NAME;
+
+        File file = new File(savePath + File.separator + planName);
+
+        boolean deletePlan = file.delete();
+
+        Log.d("PlanLoader", "File Deleted : " + planName + deletePlan);
+    }
 }
