@@ -5,9 +5,12 @@
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/people_recycler_view_bc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+
 
 </FrameLayout>

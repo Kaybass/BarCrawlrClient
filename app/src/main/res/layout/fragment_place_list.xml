@@ -5,8 +5,6 @@
     android:orientation="vertical"
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/places_recycler_view"
         android:layout_width="match_parent"
