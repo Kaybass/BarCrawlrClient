@@ -2,23 +2,15 @@ package com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
-import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
-import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
 
 
 public class PeopleListFragment extends Fragment {
@@ -59,7 +51,7 @@ public class PeopleListFragment extends Fragment {
         }
 
         public void bindPlace(int pos) {
-            personName.setText(CurrentPlan.getInstance().getPerson(pos));
+            personName.setText(CurrentUsers.getInstance().getUserName(pos));
         }
 
         @Override
@@ -87,7 +79,7 @@ public class PeopleListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return CurrentPlan.getInstance().getNumPeople();
+            return CurrentUsers.getInstance().getNumUsers();
         }
     }
 }
