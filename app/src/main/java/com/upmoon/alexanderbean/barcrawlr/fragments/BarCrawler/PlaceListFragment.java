@@ -67,7 +67,7 @@ public class PlaceListFragment extends Fragment {
         public void onClick(View v) {
 
         }
-    }i
+    }
 
     private class PlaceAdapter extends RecyclerView.Adapter<com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PlaceListFragment.PlaceHolder> {
         public PlaceAdapter() {

@@ -50,6 +50,14 @@ public class CurrentPlan {
         plan.addPlace(place);
     }
 
+    public int getNumPeople() {
+        return plan.getNumPeople();
+    }
+
+    public String getPerson(int index) {
+        return plan.getPerson(index);
+    }
+
     public Plan getPlan() {
         return plan;
     }

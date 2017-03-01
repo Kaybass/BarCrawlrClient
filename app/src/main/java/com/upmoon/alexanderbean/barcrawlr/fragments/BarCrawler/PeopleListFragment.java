@@ -38,11 +38,11 @@ public class PeopleListFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_people_list, container, false);
 
-        mPeopleAdapter = new
+        mPeopleAdapter = new PeopleAdapter();
         mPeopleRecyclerView = (RecyclerView) v.findViewById(R.id.people_recycler_view_bc);
         mPeopleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL,false));
-
+        mPeopleRecyclerView.setAdapter(mPeopleAdapter);
 
         return v;
     }
@@ -55,11 +55,11 @@ public class PeopleListFragment extends Fragment {
             super(itemView);
             itemView.setOnClickListener(this);
 
-            //personName = (TextView) itemView.findViewById(R.id.person_holder_name);
+            personName = (TextView) itemView.findViewById(R.id.people_holder_name);
         }
 
         public void bindPlace(int pos) {
-            //personName.setText(CurrentPlan.getInstance().getPeope(pos));
+            personName.setText(CurrentPlan.getInstance().getPerson(pos));
         }
 
         @Override
