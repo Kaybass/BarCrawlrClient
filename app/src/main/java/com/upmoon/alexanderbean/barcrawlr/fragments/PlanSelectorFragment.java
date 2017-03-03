@@ -68,7 +68,6 @@ public class PlanSelectorFragment extends Fragment {
     private PlanAdapter  mAdapter;
 
     private LocationManager mLM;
-    private Location mLastKnownLocation;
 
     private double mLongitude, mLatitude;
 
@@ -243,6 +242,7 @@ public class PlanSelectorFragment extends Fragment {
         PlanLoader pl = new PlanLoader(getActivity());
         mPlans = new ArrayList<>(Arrays.asList(pl.getPlans()));
         mAdapter.notifyDataSetChanged();
+        mRecyclerView.invalidate();
 
         TextView sectionLabel = (TextView) getActivity().findViewById(R.id.section_label);
         TextView selectPlan = (TextView) getActivity().findViewById(R.id.select_plan);
