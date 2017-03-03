@@ -58,7 +58,6 @@ import static android.view.View.GONE;
  * A simple {@link Fragment} subclass.
  */
 public class PlanSelectorFragment extends Fragment {
-    final static int PERMISSION_LOCATION_REQUEST_CODE = 80085; // Any number can be used for the request code.
 
     /**
      * Member variables
@@ -310,9 +309,6 @@ public class PlanSelectorFragment extends Fragment {
         }
 
 
-        /*
-            TODO: ADD DELETE OPTION
-         */
         @Override
         public void onClick(View v){
 
@@ -325,12 +321,19 @@ public class PlanSelectorFragment extends Fragment {
 
                             PlanLoader pl = new PlanLoader(getActivity());
 
-                            Log.d("PLAN CHOSEN",planName.getText().toString());
+                            Plan loadPlan = pl.loadPlan(planName.getText().toString() + ".plan");
 
-                            CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
+                            if (loadPlan != null) {
 
-                            Intent intent = new Intent(getActivity(),PlanCreator.class);
-                            startActivity(intent);
+                                CurrentPlan.getInstance().setPlan(loadPlan);
+
+                                Log.d("PLAN CHOSEN", planName.getText().toString());
+
+                                Intent intent = new Intent(getActivity(), PlanCreator.class);
+                                startActivity(intent);
+                            } else {
+                                Log.d("PlanSelectorFragment", "Unable to load plan");
+                            }
                         }
                     })
                     .setNegativeButton("Delete",new DialogInterface.OnClickListener(){
@@ -347,7 +350,9 @@ public class PlanSelectorFragment extends Fragment {
                                             // TODO: Delete the Plan
                                             PlanLoader pl = new PlanLoader(getActivity());
 
-                                            pl.deletePlan(planName.getText().toString());
+                                            pl.deletePlan(planName.getText().toString() + ".plan");
+
+                                            PlanListChanged();
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

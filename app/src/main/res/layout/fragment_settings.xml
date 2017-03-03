@@ -1,33 +1,24 @@
-<android.support.v7.preference.PreferenceScreeen
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment">
 
-    <android.support.v7.preference.PreferenceCategory
-        android:title="Plan Settings" >
+    <Button
+        android:id="@+id/embark_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:text="Embark on Plan"/>
 
-        <android.support.v7.preference.SwitchPreferenceCompact
-            android:key="key1"
-            android:title="Make Plan Private"
-            android:summary="Plan Public / Private"
-            android:defaultValue="false" />
-
-        <android.support.v7.preference.EditTextPreference
-            android:key="key2"
-            android:title="Plan Name"
-            android:summary="The Name of the Plan"
-            android:dialogMessage="Confirm the name of the plan"
-            android:defaultValue="Plan Name" />
-
-    </android.support.v7.preference.PreferenceCategory>
 
     <Button
         android:id="@+id/save_plan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="150dp"
         android:text="@string/save_plan"/>
 
-</android.support.v7.preference.PreferenceScreeen>
+</FrameLayout>

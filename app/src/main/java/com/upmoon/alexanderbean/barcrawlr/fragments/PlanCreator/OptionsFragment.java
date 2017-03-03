@@ -23,14 +23,13 @@ import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
-import com.upmoon.alexanderbean.barcrawlr.R;
 
 import org.json.JSONObject;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OptionsFragment extends PreferenceFragmentCompat {
+public class OptionsFragment extends Fragment {
 
     private LocationManager mLM;
     private Location mLastKnownLocation;
@@ -65,12 +64,6 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         });
 
         return v;
-    }
-
-    @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-        // Load the Preferences from the Layout resource
-        addPreferencesFromResource(R.xml.fragment_plan_creator_options);
     }
 
     private class AddPlan extends AsyncTask<JSONObject,String,String> {

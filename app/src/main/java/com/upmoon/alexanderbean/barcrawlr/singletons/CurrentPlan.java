@@ -34,10 +34,6 @@ public class CurrentPlan {
         return plan.getName();
     }
 
-    public ArrayList<Place> getPlaces() {
-        return plan.getPlaces();
-    }
-
     public int getNumPlaces() {
         return plan.getNumPlaces();
     }
@@ -48,14 +44,6 @@ public class CurrentPlan {
 
     public void addPlaceToPlan(Place place) {
         plan.addPlace(place);
-    }
-
-    public int getNumPeople() {
-        return plan.getNumPeople();
-    }
-
-    public String getPerson(int index) {
-        return plan.getPerson(index);
     }
 
     public Plan getPlan() {
