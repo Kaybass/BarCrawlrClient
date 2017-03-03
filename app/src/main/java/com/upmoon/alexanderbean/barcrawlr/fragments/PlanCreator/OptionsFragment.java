@@ -22,9 +22,10 @@ import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanSaver;
-import com.upmoon.alexanderbean.barcrawlr.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -33,12 +34,8 @@ import org.json.JSONObject;
 public class OptionsFragment extends PreferenceFragmentCompat {
 
     private LocationManager mLM;
-    private Location mLastKnownLocation;
 
     private double mLongitude, mLatitude;
-
-    private LocationManager locationManager;
-    private LocationListener locationListener;
 
 
     public OptionsFragment() {
@@ -64,6 +61,13 @@ public class OptionsFragment extends PreferenceFragmentCompat {
             }
         });
 
+        if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+            updateLocation();
+        }
+
         return v;
     }
 
@@ -73,29 +77,9 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.fragment_plan_creator_options);
     }
 
-    private class AddPlan extends AsyncTask<JSONObject,String,String> {
-
-        public AddPlan(){
-
-        }
-
-        @Override
-        protected String doInBackground(JSONObject... meme){
-
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(String str){
-            Toast.makeText(getActivity(), "Disconnected",Toast.LENGTH_SHORT).show();
-        }
-    }
-
     //http://stackoverflow.com/questions/33865445/gps-location-provider-requires-access-fine-location-permission-for-android-6-0
     private void updateLocation(){
-        Log.d("hi","hi");
         if(getActivity().checkCallingOrSelfPermission("android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
-            Log.d("hi","hi");
             mLM = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
             //gets last known location, low energy use, low effort
@@ -111,36 +95,59 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private class GetPlan extends AsyncTask<String, Void,String> {
+    private class AddPlan extends AsyncTask<String, Void,Boolean> {
 
-        Location mLocation;
-
-        public GetPlan(){
-        }
+        private String message;
 
         @Override
-        protected String doInBackground(String... codeAndUserName){
+        protected Boolean doInBackground(String... codeAndUserName){
 
             BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
                     getActivity().getString(R.string.bcserverapikey));
 
-            if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            updateLocation();
 
-                ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            String Result = bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
 
-                updateLocation();
+            if(Result == BarConnector.ERROR_MESSAGE){
+
+                message = BarConnector.ERROR_MESSAGE;
+
+                return false;
             }
+            else{
 
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                try{
+                    JSONObject resultJSON = new JSONObject(Result);
 
-            bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
+                    if(resultJSON.has("error")){
+                        message = resultJSON.getString("error");
+                        return false;
+                    }
+                    else{
+                        CurrentPlan  curp = CurrentPlan.getInstance();
+                        CurrentUsers curu = CurrentUsers.getInstance();
 
-            return "";
+
+
+                        return true;
+                    }
+                }
+                catch(JSONException e){
+                    message = "Server sent bad JSON";
+                    return false;
+                }
+            }
         }
 
         @Override
-        protected void onPostExecute(String str){
-            Toast.makeText(getActivity(), "Disconnected",Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(Boolean str){
+            if(str){
+
+            }
+            else{
+                Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

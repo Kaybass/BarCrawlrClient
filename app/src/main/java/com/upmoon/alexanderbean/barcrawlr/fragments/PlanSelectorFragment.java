@@ -58,8 +58,6 @@ import static android.view.View.GONE;
  * A simple {@link Fragment} subclass.
  */
 public class PlanSelectorFragment extends Fragment {
-    final static int PERMISSION_LOCATION_REQUEST_CODE = 80085; // Any number can be used for the request code.
-
     /**
      * Member variables
      */
@@ -264,9 +262,7 @@ public class PlanSelectorFragment extends Fragment {
 
     //http://stackoverflow.com/questions/33865445/gps-location-provider-requires-access-fine-location-permission-for-android-6-0
     private void updateLocation(){
-        Log.d("hi","hi");
         if(getActivity().checkCallingOrSelfPermission("android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
-            Log.d("hi","hi");
             mLM = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
             //gets last known location, low energy use, low effort
@@ -393,11 +389,6 @@ public class PlanSelectorFragment extends Fragment {
     }
 
     private class GetPlan extends AsyncTask<String, Void,String> {
-
-        Location mLocation;
-
-        public GetPlan(){
-        }
 
         @Override
         protected String doInBackground(String... codeAndUserName){

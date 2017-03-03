@@ -1,13 +1,11 @@
 package com.upmoon.alexanderbean.barcrawlr.networking;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -25,6 +23,8 @@ import java.net.URL;
  */
 
 public class BarConnector implements Connector {
+
+    public static final String ERROR_MESSAGE = "BAD THINGS HAPPENED";
 
     private String Address, ApiKey;
 
@@ -49,7 +49,7 @@ public class BarConnector implements Connector {
         try{
             return barPost(address,plan.toJson());
         }catch (IOException e){
-            return "BAD THINGS HAPPENED";
+            return ERROR_MESSAGE;
         }
     }
 
@@ -67,7 +67,7 @@ public class BarConnector implements Connector {
         try{
             return barGet(address);
         }catch (IOException e){
-            return "BAD THINGS HAPPENED";
+            return ERROR_MESSAGE;
         }
     }
 
@@ -85,7 +85,7 @@ public class BarConnector implements Connector {
         try{
             return barGet(address);
         }catch (IOException e){
-            return "BAD THINGS HAPPENED";
+            return ERROR_MESSAGE;
         }
     }
 
@@ -101,7 +101,7 @@ public class BarConnector implements Connector {
         try{
             return barGet(address);
         }catch (IOException e){
-            return "BAD THINGS HAPPENED";
+            return ERROR_MESSAGE;
         }
     }
 

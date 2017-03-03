@@ -10,8 +10,10 @@ import java.util.ArrayList;
  * Created by AlexanderBean on 1/23/2017.
  */
 public class CurrentPlan {
+
     private static CurrentPlan ourInstance = new CurrentPlan();
     private Plan plan;
+    private String code;
 
     public static CurrentPlan getInstance() {
         if (ourInstance == null) {
@@ -32,10 +34,6 @@ public class CurrentPlan {
 
     public String getName() {
         return plan.getName();
-    }
-
-    public ArrayList<Place> getPlaces() {
-        return plan.getPlaces();
     }
 
     public int getNumPlaces() {
@@ -60,5 +58,13 @@ public class CurrentPlan {
 
     public Plan getPlan() {
         return plan;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }
