@@ -1,7 +1,10 @@
 package com.upmoon.alexanderbean.barcrawlr.singletons;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -9,44 +12,49 @@ import java.util.ArrayList;
  * Created by AlexanderBean on 1/23/2017.
  */
 public class CurrentUsers {
-    private boolean BAR_CRAWLER = false;
+
+    private boolean planIsActive;
 
     private static CurrentUsers ourInstance = new CurrentUsers();
 
-    private ArrayList<User>  users = new ArrayList<>();
+    private ArrayList<User> usersList;
 
     public static CurrentUsers getInstance() {
         return ourInstance;
     }
 
     private CurrentUsers() {
+        planIsActive = false;
     }
 
-    public void setBarCrawler() {
-        BAR_CRAWLER = true;
+    public boolean isActive(){
+        return planIsActive;
     }
 
-    public int getNumUsers() {
-        return users.size();
+    public void setPlanIsActive(boolean planIsActive) {
+        this.planIsActive = planIsActive;
     }
 
-    public String getUserName(int index) {
-        return users.get(index).getName();
-    }
+    public boolean loadUsers(JSONObject users){
+        try{
+            JSONArray theUsers = users.getJSONArray("users");
 
-    public LatLng getUserLocation(int index) {
+            usersList = new ArrayList<>();
 
-        if(BAR_CRAWLER) {
+            for (int i = 0; i < theUsers.length(); i++){
+                JSONObject user = theUsers.getJSONObject(i);
 
-            LatLng userLocation = new LatLng(users.get(index).getLat(), users.get(index).getLon());
-
-            return userLocation;
+                usersList.add(new User(user.getString("name"),
+                        user.getDouble("lon"),user.getDouble("lat")));
+            }
+            return true;
         }
-
-        return null;
+        catch(JSONException e) {
+            return false;
+        }
     }
 
-    public void updateUserLocations() {
-        // TODO: update users ArrayList locations
+    public ArrayList<User> getUsers() {
+        return usersList;
     }
 }

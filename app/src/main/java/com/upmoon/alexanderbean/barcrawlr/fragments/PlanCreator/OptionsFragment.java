@@ -128,7 +128,9 @@ public class OptionsFragment extends PreferenceFragmentCompat {
                         CurrentPlan  curp = CurrentPlan.getInstance();
                         CurrentUsers curu = CurrentUsers.getInstance();
 
+                        curp.setCode(resultJSON.getString("code"));
 
+                        curu.loadUsers(resultJSON.getJSONObject("users"));
 
                         return true;
                     }
@@ -143,7 +145,7 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         @Override
         protected void onPostExecute(Boolean str){
             if(str){
-
+                //load barcrawlr
             }
             else{
                 Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();
