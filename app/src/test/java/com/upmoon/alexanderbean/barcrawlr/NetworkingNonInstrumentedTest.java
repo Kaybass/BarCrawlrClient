@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+
+//This would work if we weren't lazy and mocked Android.net.uri
 public class NetworkingNonInstrumentedTest {
 
     private final String APIKEY = "ONLYTHEBIGGESTMEMES";
