@@ -1,6 +1,11 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Process;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,10 +35,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
+
 public class BarCrawler extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+
+    private LocationManager mLM;
+    private LocationListener mLL;
 
     private Thread mUpdateThread;
 
@@ -59,7 +69,24 @@ public class BarCrawler extends AppCompatActivity {
         mViewPager.clearOnPageChangeListeners();
         mTabLayout.setupWithViewPager(mViewPager);
 
+        mLM = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
 
+        mLL = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                mLongitude = location.getLongitude();
+                mLatitude = location.getLatitude();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
 
         mUpdateThread = new Thread(new Runnable() {
 
@@ -71,20 +98,24 @@ public class BarCrawler extends AppCompatActivity {
 
                 while(isRunning()) {
 
-                    String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
-                            ,new User(CurrentUsers.getInstance().getSelf(),getLongitude(),getLatitude()));
+                    // Update Client Location
+                    if(checkPermission("android.permission.ACCESS_FINE_LOCATION", Process.myPid(), Process.myUid()) == PERMISSION_GRANTED) {
+                        mLM.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLL);
 
-                    Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
+                        String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
+                                , new User(CurrentUsers.getInstance().getSelf(), getLongitude(), getLatitude()));
 
-                    parseUserResponse(usersResponse);
+                        Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
 
-                    //Sleep
-                    try {
-                        Thread.sleep(getSleepTime());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        parseUserResponse(usersResponse);
+
+                        //Sleep
+                        try {
+                            Thread.sleep(getSleepTime());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-
                 }
             }
         });
