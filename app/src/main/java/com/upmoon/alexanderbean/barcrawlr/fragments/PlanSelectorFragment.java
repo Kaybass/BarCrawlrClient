@@ -94,11 +94,35 @@ public class PlanSelectorFragment extends Fragment {
         mLeftFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity());
 
+                final EditText inp = new EditText(getActivity());
+
+                inp.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                buildo.setTitle("Join Active Plan");
+
+                buildo.setView(inp);
+
+                buildo.setPositiveButton("Join",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+
+
+                    }
+                });
+                buildo.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+
+                    }
+                });
+
+                buildo.show();
             }
         });
 
-        mRightFAB = (FloatingActionButton) v.findViewById(R.id.connect_fab);
+        mRightFAB = (FloatingActionButton) v.findViewById(R.id.new_plan_fab);
         mRightFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,8 +1,10 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -32,6 +35,12 @@ public class BarCrawler extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
+    private Thread mUpdateThread;
+
+    private volatile boolean mRunning = true;
+
+    private static int mSleepTime = 600000;
+
     public static Intent newIntent(Context packageContext, UUID planName) {
         Intent intent = new Intent(packageContext, BarCrawler.class);
         intent.putExtra(EXTRA_PLAN_NAME, planName);
@@ -45,7 +54,7 @@ public class BarCrawler extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.container);
 
-       if (mViewPager != null) { setUpViewPager(); }
+        if (mViewPager != null) { setUpViewPager(); }
 
         // Initialize the TabLayout.
         mTabLayout = (TabLayout) findViewById(R.id.tabs_BC);
@@ -53,6 +62,25 @@ public class BarCrawler extends AppCompatActivity {
         mTabLayout.setupWithViewPager(mViewPager);
 
         setTitle("Bar Crawl : " + CurrentPlan.getInstance().getName());
+
+        mUpdateThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                while(isRunning()) {
+
+
+                    //Sleep
+                    try {
+                        Thread.sleep(getSleepTime());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+        mUpdateThread.start();
     }
 
 
@@ -66,6 +94,55 @@ public class BarCrawler extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return true;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d("BARCRAWLRACTIVITY", "onDestroy() called");
+        setRunning(false);
+    }
+
+    @Override
+    public void onBackPressed(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Are you sure you want to leave the crawl?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface diag, int which) {
+
+                        //TODO write function to clean up stuff from plan
+
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface diag, int which) {
+                        diag.cancel();
+                    }
+                }).setCancelable(true);
+
+        final AlertDialog alertDialogConfirmation = builder.create();
+
+        alertDialogConfirmation.show();
+    }
+
+    public boolean isRunning() {
+        return mRunning;
+    }
+
+    public void setRunning(boolean mRunning) {
+        this.mRunning = mRunning;
+    }
+
+    public static int getSleepTime() {
+        return mSleepTime;
+    }
+
+    public static void setSleepTime(int mSleepTime) {
+        BarCrawler.mSleepTime = mSleepTime;
     }
 
     private void setUpViewPager() {

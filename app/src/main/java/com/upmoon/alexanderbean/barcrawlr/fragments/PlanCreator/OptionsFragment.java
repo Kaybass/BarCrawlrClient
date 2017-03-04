@@ -38,6 +38,8 @@ public class OptionsFragment extends Fragment {
 
     private Button mSavePlan, mSharePlan;
 
+    private volatile boolean mTaskRunning = false;
+
 
     public OptionsFragment() {
         // Required empty public constructor
@@ -83,6 +85,14 @@ public class OptionsFragment extends Fragment {
         return v;
     }
 
+    public boolean isTaskRunning() {
+        return mTaskRunning;
+    }
+
+    public void setTaskRunning(boolean mTaskRunning) {
+        this.mTaskRunning = mTaskRunning;
+    }
+
     //http://stackoverflow.com/questions/33865445/gps-location-provider-requires-access-fine-location-permission-for-android-6-0
     private void updateLocation(){
         if(getActivity().checkCallingOrSelfPermission("android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
@@ -108,72 +118,73 @@ public class OptionsFragment extends Fragment {
         @Override
         protected Boolean doInBackground(String... planAndUserName){
 
-            BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
-                    getActivity().getString(R.string.bcserverapikey));
+            if(!isTaskRunning()){
 
-            Log.d("DO IN BACKGROUND", "HIT ME");
+                setTaskRunning(true);
 
-            updateLocation();
+                BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
+                        getActivity().getString(R.string.bcserverapikey));
 
-            Log.d("DO IN BACKGROUND", "HIT ME");
+                updateLocation();
 
-            Log.d("DO IN BACKGROUND", CurrentPlan.getInstance().getPlan().toJson());
+                String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(planAndUserName[0],mLongitude,mLatitude));
 
-            Log.d("DO IN BACKGROUND", new User(planAndUserName[0],mLongitude,mLatitude).toJson());
+                if(Result == BarConnector.ERROR_MESSAGE){
 
-            String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(planAndUserName[0],mLongitude,mLatitude));
+                    message = BarConnector.ERROR_MESSAGE;
 
-            Log.d("DO IN BACKGROUND", Result);
-
-            if(Result == BarConnector.ERROR_MESSAGE){
-
-                Log.d("DO IN BACKGROUND", "HIT ME");
-
-                message = BarConnector.ERROR_MESSAGE;
-
-                return false;
-            }
-            else{
-
-                try{
-                    Log.d("DO IN BACKGROUND", "Bout to parse that json");
-
-                    JSONObject resultJSON = new JSONObject(Result);
-
-                    if(resultJSON.has("error")){
-                        Log.d("DO IN BACKGROUND", "Bingo");
-                        message = resultJSON.getString("error");
-                        return false;
-                    }
-                    else{
-                        Log.d("DO IN BACKGROUND", "Bango");
-                        CurrentPlan  curp = CurrentPlan.getInstance();
-                        CurrentUsers curu = CurrentUsers.getInstance();
-
-                        curp.setCode(resultJSON.getString("code"));
-
-                        curu.loadUsers(resultJSON.getJSONObject("users"));
-                        Log.d("DO IN BACKGROUND", "Boingo");
-
-                        return true;
-                    }
-                }
-                catch(JSONException e){
-                    Log.d("DO IN BACKGROUND", "Bado");
-                    message = "Server sent bad JSON";
+                    setTaskRunning(false);
                     return false;
                 }
+                else{
+
+                    try{
+
+                        JSONObject resultJSON = new JSONObject(Result);
+
+                        if(resultJSON.has("error")){
+                            message = resultJSON.getString("error");
+
+                            setTaskRunning(false);
+                            return false;
+                        }
+                        else{
+                            CurrentPlan  curp = CurrentPlan.getInstance();
+                            CurrentUsers curu = CurrentUsers.getInstance();
+
+                            curp.setCode(resultJSON.getString("code"));
+
+                            curu.loadUsers(resultJSON.getJSONObject("users"));
+
+                            setTaskRunning(false);
+                            return true;
+                        }
+                    }
+                    catch(JSONException e){
+                        message = "Server sent bad JSON";
+                        setTaskRunning(false);
+                        return false;
+                    }
+                }
+            }
+            else{
+                message = "";
+                setTaskRunning(false);
+                return false;
             }
         }
 
         @Override
         protected void onPostExecute(Boolean str){
+
             if(str){
                 Intent i = new Intent(getActivity(),BarCrawler.class);
                 startActivity(i);
             }
             else{
-                Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();
+                if(!message.equals("")){
+                    Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
