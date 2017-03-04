@@ -94,10 +94,24 @@ public class PlanLoader {
 
         String savePath = mContext.getFilesDir().getAbsolutePath() + File.separator + SAVE_DIRECTORY_NAME;
 
-        File file = new File(savePath + File.separator + planName);
+        File saveFolder = new File(savePath);
 
-        boolean deletePlan = file.delete();
+        if(!saveFolder.exists()){
+            Log.d("PlanLoader", "File Not Deleted : save folder does not exist");
+            return;
+        }
 
-        Log.d("PlanLoader", "File Deleted : " + planName + deletePlan);
+        String[] saves = saveFolder.list();
+
+        if(!Arrays.asList(saves).contains(planName)){
+            Log.d("PlanLoader", "File Not Deleted : Plan not found");
+            return;
+        }
+
+        File deleteFile = new File(savePath + File.separator + planName);
+
+        boolean deletePlan = deleteFile.delete();
+
+        Log.d("PlanLoader", "File Deleted : " + planName + " Status : " + deletePlan);
     }
 }

@@ -5,18 +5,20 @@
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment">
 
     <Button
+        android:id="@+id/embark_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="150dp"
+        android:text="Embark on Plan"/>
+
+
+    <Button
         android:id="@+id/save_plan_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="150dp"
-        android:text="Save Plan"/>
-
-    <Button
-        android:id="@+id/add_people_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Share"/>
+        android:layout_marginTop="150dp"
+        android:text="@string/save_plan"/>
 
 </FrameLayout>

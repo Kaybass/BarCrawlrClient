@@ -10,7 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class PeopleListFragment extends Fragment {
@@ -43,15 +47,19 @@ public class PeopleListFragment extends Fragment {
 
         private TextView personName;
 
+        private ArrayList<User> users;
+
         public PeopleHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
 
             personName = (TextView) itemView.findViewById(R.id.people_holder_name);
+
+            users = CurrentUsers.getInstance().getUsers();
         }
 
         public void bindPlace(int pos) {
-            //personName.setText(CurrentUsers.getInstance().getUserName(pos));
+            personName.setText(users.get(pos).getName());
         }
 
         @Override
@@ -79,7 +87,7 @@ public class PeopleListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return 0;
+            return CurrentUsers.getInstance().getUsers().size();
         }
     }
 }

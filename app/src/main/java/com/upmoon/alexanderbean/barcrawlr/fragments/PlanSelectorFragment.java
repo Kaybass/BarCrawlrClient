@@ -68,7 +68,6 @@ public class PlanSelectorFragment extends Fragment {
     private PlanAdapter  mAdapter;
 
     private LocationManager mLM;
-    private Location mLastKnownLocation;
 
     private double mLongitude, mLatitude;
 
@@ -243,6 +242,7 @@ public class PlanSelectorFragment extends Fragment {
         PlanLoader pl = new PlanLoader(getActivity());
         mPlans = new ArrayList<>(Arrays.asList(pl.getPlans()));
         mAdapter.notifyDataSetChanged();
+        mRecyclerView.invalidate();
 
         TextView sectionLabel = (TextView) getActivity().findViewById(R.id.section_label);
         TextView selectPlan = (TextView) getActivity().findViewById(R.id.select_plan);
@@ -305,6 +305,7 @@ public class PlanSelectorFragment extends Fragment {
             planLastAccessDate.setText(date);
         }
 
+
         @Override
         public void onClick(View v){
 
@@ -317,12 +318,19 @@ public class PlanSelectorFragment extends Fragment {
 
                             PlanLoader pl = new PlanLoader(getActivity());
 
-                            Log.d("PLAN CHOSEN","\"" + planName.getText().toString() + "\"");
+                            Plan loadPlan = pl.loadPlan(planName.getText().toString() + ".plan");
 
-                            CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
+                            if (loadPlan != null) {
+
+                                CurrentPlan.getInstance().setPlan(loadPlan);
+
+                                Log.d("PLAN CHOSEN", planName.getText().toString());
 
                             Intent intent = new Intent(getActivity(),PlanCreator.class);
                             startActivity(intent);
+                            } else {
+                                Log.d("PlanSelectorFragment", "Unable to load plan");
+                        }
                         }
                     })
                     .setNegativeButton("Delete",new DialogInterface.OnClickListener(){
@@ -339,7 +347,9 @@ public class PlanSelectorFragment extends Fragment {
                                             // TODO: Delete the Plan
                                             PlanLoader pl = new PlanLoader(getActivity());
 
-                                            pl.deletePlan(planName.getText().toString());
+                                            pl.deletePlan(planName.getText().toString() + ".plan");
+
+                                            PlanListChanged();
                                         }
                                     })
                                     .setNegativeButton("No", new DialogInterface.OnClickListener() {

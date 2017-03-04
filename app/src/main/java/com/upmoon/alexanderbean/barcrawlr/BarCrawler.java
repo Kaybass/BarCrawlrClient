@@ -2,6 +2,7 @@ package com.upmoon.alexanderbean.barcrawlr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -14,19 +15,22 @@ import android.view.MenuItem;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment;
-import com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.OptionsFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PlaceListFragment;
+import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.OptionsFragment;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class BarCrawler extends AppCompatActivity {
     private static final String EXTRA_PLAN_NAME = "com.upmoon.alexander.barcrawlr.plan_name";
 
-
     PlanLoader planLoader;
 
     private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     public static Intent newIntent(Context packageContext, UUID planName) {
         Intent intent = new Intent(packageContext, BarCrawler.class);
@@ -41,30 +45,14 @@ public class BarCrawler extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.container);
 
-        planLoader = new PlanLoader(getApplicationContext());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        mViewPager.setAdapter(new FragmentPagerAdapter(fragmentManager) {
-            @Override
-            public Fragment getItem(int position) {
-                switch(position) {
-                    case 0:
-                        return new MapFragment();
-                    case 1:
-                        return new PlaceListFragment();
-                    case 2:
-                        return new PeopleListFragment();
-                    case 3:
-                        return new OptionsFragment();
-                }
-                return new MapFragment();
-            }
+       if (mViewPager != null) { setUpViewPager(); }
 
-            @Override
-            public int getCount() {
-                // There are four fragments(/pages) in the PlanCreator ViewPager
-                return 4;
-            }
-        });
+        // Initialize the TabLayout.
+        mTabLayout = (TabLayout) findViewById(R.id.tabs_BC);
+        mViewPager.clearOnPageChangeListeners();
+        mTabLayout.setupWithViewPager(mViewPager);
+
+        setTitle("Bar Crawl : " + CurrentPlan.getInstance().getName());
     }
 
 
@@ -80,6 +68,42 @@ public class BarCrawler extends AppCompatActivity {
         return true;
     }
 
+    private void setUpViewPager() {
+        BC_Adapter adapter = new BC_Adapter(getSupportFragmentManager());
+        adapter.addFragment(new MapFragment(), "Map");
+        adapter.addFragment(new PlaceListFragment(), "Places");
+        adapter.addFragment(new PeopleListFragment(), "People");
+        adapter.addFragment(new OptionsFragment(), "Options");
+        mViewPager.setAdapter(adapter);
+    }
 
+    static class BC_Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragments = new ArrayList<>();
+        private final List<String> fragmentTitles = new ArrayList<>();
+
+        public BC_Adapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            fragments.add(fragment);
+            fragmentTitles.add(title);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitles.get(position);
+        }
+    }
 }
 
