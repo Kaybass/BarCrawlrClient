@@ -19,7 +19,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
 
 import java.util.ArrayList;
 
@@ -105,10 +107,23 @@ public class MapFragment extends SupportMapFragment {
                 LatLng point = new LatLng(CurrentPlan.getInstance().getPlace(i).getLat(), CurrentPlan.getInstance().getPlace(i).getLon());
                 options.add(point);
             }
+
+            if (CurrentUsers.getInstance().isActive()) {
+                // Add a marker on the map at each User's location
+                ArrayList<User> users = CurrentUsers.getInstance().getUsers();
+
+                for (int i=0; i < users.size(); i++) {
+                    markers.add(map.addMarker(new MarkerOptions()
+                        .position(new LatLng(users.get(i).getLat(), users.get(i).getLon()))
+                        .title(users.get(i).getName())));
+                }
+
+            }
             mLine = mMap.addPolyline(options);
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
+            // Draw the markers on the Map.
             for (Marker marker : markers) {
                 builder.include(marker.getPosition());
             }
