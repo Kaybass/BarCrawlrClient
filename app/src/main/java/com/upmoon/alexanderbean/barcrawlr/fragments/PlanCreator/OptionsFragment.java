@@ -152,6 +152,8 @@ public class OptionsFragment extends Fragment {
                             CurrentPlan  curp = CurrentPlan.getInstance();
                             CurrentUsers curu = CurrentUsers.getInstance();
 
+                            curu.setSelf(planAndUserName[0]);
+
                             curp.setCode(resultJSON.getString("code"));
 
                             curu.loadUsers(resultJSON.getJSONObject("users"));

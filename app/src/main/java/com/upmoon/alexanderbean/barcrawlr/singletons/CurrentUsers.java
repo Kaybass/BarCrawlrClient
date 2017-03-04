@@ -19,6 +19,8 @@ public class CurrentUsers {
 
     private ArrayList<User> usersList;
 
+    private String self;
+
     public static CurrentUsers getInstance() {
         return ourInstance;
     }
@@ -56,5 +58,13 @@ public class CurrentUsers {
 
     public ArrayList<User> getUsers() {
         return usersList;
+    }
+
+    public String getSelf() {
+        return self;
+    }
+
+    public void setSelf(String self) {
+        this.self = self;
     }
 }

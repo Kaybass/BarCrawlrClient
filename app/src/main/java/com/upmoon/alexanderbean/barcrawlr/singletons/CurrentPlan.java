@@ -15,6 +15,8 @@ public class CurrentPlan {
     private Plan plan;
     private String code;
 
+    private boolean imported;
+
     public static CurrentPlan getInstance() {
         if (ourInstance == null) {
             ourInstance = new CurrentPlan();
@@ -26,6 +28,14 @@ public class CurrentPlan {
 
     private CurrentPlan() {
 
+    }
+
+    public boolean isImported() {
+        return imported;
+    }
+
+    public void setImported(boolean imported) {
+        this.imported = imported;
     }
 
     public void setPlan(Plan plan){

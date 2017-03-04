@@ -1,8 +1,6 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,22 +13,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.fragments.MapFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PeopleListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.PlaceListFragment;
 import com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler.OptionsFragment;
+import com.upmoon.alexanderbean.barcrawlr.model.User;
+import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
-import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class BarCrawler extends AppCompatActivity {
-    private static final String EXTRA_PLAN_NAME = "com.upmoon.alexander.barcrawlr.plan_name";
-
-    PlanLoader planLoader;
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -39,13 +39,11 @@ public class BarCrawler extends AppCompatActivity {
 
     private volatile boolean mRunning = true;
 
-    private static int mSleepTime = 600000;
+    private static int mSleepTime = 300000;
 
-    public static Intent newIntent(Context packageContext, UUID planName) {
-        Intent intent = new Intent(packageContext, BarCrawler.class);
-        intent.putExtra(EXTRA_PLAN_NAME, planName);
-        return intent;
-    }
+    private double mLongitude;
+
+    private double mLatitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +59,24 @@ public class BarCrawler extends AppCompatActivity {
         mViewPager.clearOnPageChangeListeners();
         mTabLayout.setupWithViewPager(mViewPager);
 
-        setTitle("Bar Crawl : " + CurrentPlan.getInstance().getName());
+
 
         mUpdateThread = new Thread(new Runnable() {
 
             @Override
             public void run() {
+
+                BarConnector bc = new BarConnector(getString(R.string.bcsite),
+                                            getString(R.string.bcserverapikey));
+
                 while(isRunning()) {
 
+                    String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
+                            ,new User(CurrentUsers.getInstance().getSelf(),getLongitude(),getLatitude()));
+
+                    Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
+
+                    parseUserResponse(usersResponse);
 
                     //Sleep
                     try {
@@ -143,6 +151,41 @@ public class BarCrawler extends AppCompatActivity {
 
     public static void setSleepTime(int mSleepTime) {
         BarCrawler.mSleepTime = mSleepTime;
+    }
+
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(double mLongitude) {
+        this.mLongitude = mLongitude;
+    }
+
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    public void parseUserResponse(String users){
+        try{
+            JSONObject usersJson = new JSONObject(users);
+
+            if(usersJson.has("error")){
+                Log.d("BarCrawlrActivity", "Server sent:" + usersJson.getString("error"));
+                String errorMessage = "error: " + usersJson.getString("error");
+                Toast.makeText(this, errorMessage ,Toast.LENGTH_SHORT ).show();
+            }
+            else{
+                CurrentUsers.getInstance().loadUsers(usersJson);
+            }
+
+        }
+        catch (JSONException e){
+            Log.d("BarCrawlrActivity", "Server sent bad response to users");
+        }
     }
 
     private void setUpViewPager() {
