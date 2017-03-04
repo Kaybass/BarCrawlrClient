@@ -2,6 +2,7 @@ package com.upmoon.alexanderbean.barcrawlr;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -49,7 +50,7 @@ public class BarCrawler extends AppCompatActivity {
 
     private volatile boolean mRunning = true;
 
-    private static int mSleepTime = 300000;
+    private static int mSleepTime = 1000;//300000;
 
     private double mLongitude;
 
@@ -88,6 +89,11 @@ public class BarCrawler extends AppCompatActivity {
             public void onProviderDisabled(String provider) {}
         };
 
+        if(checkPermission("android.permission.ACCESS_FINE_LOCATION", Process.myPid(), Process.myUid()) == PERMISSION_GRANTED)
+            mLM.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLL);
+
+        updateLocationToCached();
+
         mUpdateThread = new Thread(new Runnable() {
 
             @Override
@@ -99,23 +105,21 @@ public class BarCrawler extends AppCompatActivity {
                 while(isRunning()) {
 
                     // Update Client Location
-                    if(checkPermission("android.permission.ACCESS_FINE_LOCATION", Process.myPid(), Process.myUid()) == PERMISSION_GRANTED) {
-                        mLM.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLL);
 
-                        String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
-                                , new User(CurrentUsers.getInstance().getSelf(), getLongitude(), getLatitude()));
+                    String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
+                            , new User(CurrentUsers.getInstance().getSelf(), getLongitude(), getLatitude()));
 
-                        Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
+                    Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
 
-                        parseUserResponse(usersResponse);
+                    parseUserResponse(usersResponse);
 
-                        //Sleep
-                        try {
-                            Thread.sleep(getSleepTime());
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    //Sleep
+                    try {
+                        Thread.sleep(getSleepTime());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+
                 }
             }
         });
@@ -198,6 +202,23 @@ public class BarCrawler extends AppCompatActivity {
 
     public void setLatitude(double mLatitude) {
         this.mLatitude = mLatitude;
+    }
+
+    private void updateLocationToCached(){
+        if(checkCallingOrSelfPermission("android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+            mLM = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+            //gets last known location, low energy use, low effort
+            Location location = mLM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //handles mildy rare case where device has no known last location
+            if(!(location == null)) {
+                mLongitude = location.getLongitude();
+                mLatitude = location.getLatitude();
+            } else {
+                mLongitude = 0;
+                mLatitude = 0;
+            }
+        }
     }
 
     public void parseUserResponse(String users){

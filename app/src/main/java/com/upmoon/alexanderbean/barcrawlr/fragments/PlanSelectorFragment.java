@@ -145,7 +145,7 @@ public class PlanSelectorFragment extends Fragment {
 
                         String planName = inp.getText().toString();
 
-                        if(planName != "" && pl.planNameExists(planName)){
+                        if(!planName.equals("") && pl.planNameExists(planName)){
                             Toast.makeText(getActivity(),"Invalid Name or name exists",Toast.LENGTH_SHORT).show();
                         }
                         else{
