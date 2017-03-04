@@ -1,16 +1,14 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
@@ -31,11 +30,13 @@ import org.json.JSONObject;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OptionsFragment extends PreferenceFragmentCompat {
+public class OptionsFragment extends Fragment {
 
     private LocationManager mLM;
 
     private double mLongitude, mLatitude;
+
+    private Button mSavePlan, mSharePlan;
 
 
     public OptionsFragment() {
@@ -49,8 +50,8 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        final Button savePlan = (Button) v.findViewById(R.id.save_plan_button);
-        savePlan.setOnClickListener(new View.OnClickListener() {
+        mSavePlan = (Button) v.findViewById(R.id.save_plan_button);
+        mSavePlan.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 PlanSaver planSaver = new PlanSaver(getActivity());
 
@@ -58,6 +59,17 @@ public class OptionsFragment extends PreferenceFragmentCompat {
 
                 Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        mSharePlan = (Button) v.findViewById(R.id.add_people_button);
+        mSharePlan.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                AddPlan ap = new AddPlan();
+
+                //TODO: add dialogue for user name
+
+                ap.execute("alex");
             }
         });
 
@@ -69,12 +81,6 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         }
 
         return v;
-    }
-
-    @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
-        // Load the Preferences from the Layout resource
-        addPreferencesFromResource(R.xml.fragment_plan_creator_options);
     }
 
     //http://stackoverflow.com/questions/33865445/gps-location-provider-requires-access-fine-location-permission-for-android-6-0
@@ -100,16 +106,28 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         private String message;
 
         @Override
-        protected Boolean doInBackground(String... codeAndUserName){
+        protected Boolean doInBackground(String... planAndUserName){
 
             BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
                     getActivity().getString(R.string.bcserverapikey));
 
+            Log.d("DO IN BACKGROUND", "HIT ME");
+
             updateLocation();
 
-            String Result = bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
+            Log.d("DO IN BACKGROUND", "HIT ME");
+
+            Log.d("DO IN BACKGROUND", CurrentPlan.getInstance().getPlan().toJson());
+
+            Log.d("DO IN BACKGROUND", new User(planAndUserName[0],mLongitude,mLatitude).toJson());
+
+            String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(planAndUserName[0],mLongitude,mLatitude));
+
+            Log.d("DO IN BACKGROUND", Result);
 
             if(Result == BarConnector.ERROR_MESSAGE){
+
+                Log.d("DO IN BACKGROUND", "HIT ME");
 
                 message = BarConnector.ERROR_MESSAGE;
 
@@ -118,24 +136,30 @@ public class OptionsFragment extends PreferenceFragmentCompat {
             else{
 
                 try{
+                    Log.d("DO IN BACKGROUND", "Bout to parse that json");
+
                     JSONObject resultJSON = new JSONObject(Result);
 
                     if(resultJSON.has("error")){
+                        Log.d("DO IN BACKGROUND", "Bingo");
                         message = resultJSON.getString("error");
                         return false;
                     }
                     else{
+                        Log.d("DO IN BACKGROUND", "Bango");
                         CurrentPlan  curp = CurrentPlan.getInstance();
                         CurrentUsers curu = CurrentUsers.getInstance();
 
                         curp.setCode(resultJSON.getString("code"));
 
                         curu.loadUsers(resultJSON.getJSONObject("users"));
+                        Log.d("DO IN BACKGROUND", "Boingo");
 
                         return true;
                     }
                 }
                 catch(JSONException e){
+                    Log.d("DO IN BACKGROUND", "Bado");
                     message = "Server sent bad JSON";
                     return false;
                 }
@@ -145,7 +169,8 @@ public class OptionsFragment extends PreferenceFragmentCompat {
         @Override
         protected void onPostExecute(Boolean str){
             if(str){
-                //load barcrawlr
+                Intent i = new Intent(getActivity(),BarCrawler.class);
+                startActivity(i);
             }
             else{
                 Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();

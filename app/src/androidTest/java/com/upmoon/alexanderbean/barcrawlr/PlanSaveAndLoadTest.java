@@ -74,11 +74,11 @@ public class PlanSaveAndLoadTest {
 
         File[] s = pl.getPlans();
 
-        assertEquals("Alex's Plan.plan",s[0].getName());
+        assertEquals("member.plan",s[0].getName());
 
         myPlan = pl.loadPlan(s[0].getName());
 
-        assertEquals("Alex's Plan",myPlan.getName());
+        assertEquals("member",myPlan.getName());
 
         assertEquals(2,myPlan.getNumPlaces());
 

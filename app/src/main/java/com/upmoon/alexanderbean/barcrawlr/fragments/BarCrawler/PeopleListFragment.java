@@ -51,7 +51,7 @@ public class PeopleListFragment extends Fragment {
         }
 
         public void bindPlace(int pos) {
-            personName.setText(CurrentUsers.getInstance().getUserName(pos));
+            //personName.setText(CurrentUsers.getInstance().getUserName(pos));
         }
 
         @Override
@@ -79,7 +79,7 @@ public class PeopleListFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return CurrentUsers.getInstance().getNumUsers();
+            return 0;
         }
     }
 }

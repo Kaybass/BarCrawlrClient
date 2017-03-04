@@ -73,9 +73,9 @@ public class Plan implements Serializable{
         for(int i = 0; i < numPlaces; i++){
 
             if(i + 1 < numPlaces)
-                json += places.get(i).toJson() + ",";
+                json += places.get(i).toJson().replace("/"," ") + ",";
             else
-                json += places.get(i).toJson();
+                json += places.get(i).toJson().replace("/"," ");
         }
 
         json += "]}";

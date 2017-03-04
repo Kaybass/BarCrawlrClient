@@ -305,10 +305,6 @@ public class PlanSelectorFragment extends Fragment {
             planLastAccessDate.setText(date);
         }
 
-
-        /*
-            TODO: ADD DELETE OPTION
-         */
         @Override
         public void onClick(View v){
 
@@ -321,7 +317,7 @@ public class PlanSelectorFragment extends Fragment {
 
                             PlanLoader pl = new PlanLoader(getActivity());
 
-                            Log.d("PLAN CHOSEN",planName.getText().toString());
+                            Log.d("PLAN CHOSEN","\"" + planName.getText().toString() + "\"");
 
                             CurrentPlan.getInstance().setPlan(pl.loadPlan(planName.getText().toString() + ".plan"));
 

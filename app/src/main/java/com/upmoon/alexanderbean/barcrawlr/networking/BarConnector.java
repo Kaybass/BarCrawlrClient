@@ -1,6 +1,7 @@
 package com.upmoon.alexanderbean.barcrawlr.networking;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
@@ -45,7 +46,7 @@ public class BarConnector implements Connector {
                 .appendQueryParameter("lat",Double.toString(self.getLat()))
                 .build()
                 .toString();
-
+        Log.d("kek",address);
         try{
             return barPost(address,plan.toJson());
         }catch (IOException e){
@@ -134,6 +135,8 @@ public class BarConnector implements Connector {
         HttpPost post = new HttpPost(address);
 
         StringEntity se = new StringEntity(plan);
+
+        Log.d("kek",plan);
 
         post.setEntity(se);
         post.setHeader("Content-type", "application/json");
