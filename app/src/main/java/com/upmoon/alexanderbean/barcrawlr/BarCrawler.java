@@ -68,6 +68,8 @@ public class BarCrawler extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("Crawl: " + CurrentPlan.getInstance().getCode());
+
         mViewPager = (ViewPager) findViewById(R.id.container);
 
         if (mViewPager != null) { setUpViewPager(); }
