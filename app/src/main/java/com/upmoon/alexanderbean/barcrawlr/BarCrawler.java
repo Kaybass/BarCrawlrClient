@@ -1,6 +1,5 @@
 package com.upmoon.alexanderbean.barcrawlr;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +40,10 @@ import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class BarCrawler extends AppCompatActivity {
 
+    private static final int MINUTES_TO_MILLISECONDS = 60000;
+
+    private static int mMinutesToUpdate = 3;
+
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
@@ -50,7 +54,7 @@ public class BarCrawler extends AppCompatActivity {
 
     private volatile boolean mRunning = true;
 
-    private static int mSleepTime = 1000;//300000;
+    private static int mSleepTime = mMinutesToUpdate * MINUTES_TO_MILLISECONDS;
 
     private double mLongitude;
 
@@ -60,6 +64,9 @@ public class BarCrawler extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_crawler);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.container);
 
@@ -130,13 +137,14 @@ public class BarCrawler extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bar_crawler, menu);
+        getMenuInflater().inflate(R.menu.menu_plan_selector, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
