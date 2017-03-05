@@ -77,7 +77,7 @@ public class BarCrawler extends AppCompatActivity {
         mViewPager.clearOnPageChangeListeners();
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mLM = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        mLM = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         mLL = new LocationListener() {
             @Override

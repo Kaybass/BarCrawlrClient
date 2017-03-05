@@ -116,7 +116,7 @@ public class OptionsFragment extends Fragment {
         private String message;
 
         @Override
-        protected Boolean doInBackground(String... planAndUserName){
+        protected Boolean doInBackground(String... userName){
 
             if(!isTaskRunning()){
 
@@ -127,7 +127,7 @@ public class OptionsFragment extends Fragment {
 
                 updateLocation();
 
-                String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(planAndUserName[0],mLongitude,mLatitude));
+                String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(userName[0],mLongitude,mLatitude));
 
                 if(Result == BarConnector.ERROR_MESSAGE){
 
@@ -152,7 +152,7 @@ public class OptionsFragment extends Fragment {
                             CurrentPlan  curp = CurrentPlan.getInstance();
                             CurrentUsers curu = CurrentUsers.getInstance();
 
-                            curu.setSelf(planAndUserName[0]);
+                            curu.setSelf(userName[0]);
 
                             curp.setCode(resultJSON.getString("code"));
 

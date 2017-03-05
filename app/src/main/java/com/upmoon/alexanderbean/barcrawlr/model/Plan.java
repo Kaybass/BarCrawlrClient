@@ -23,18 +23,17 @@ import java.util.ArrayList;
  */
 public class Plan implements Serializable{
 
+    public static final String INVALID_PLAN_NAME = "INVALID";
+
     private String name;
 
     private ArrayList<Place> places;
-
-    private ArrayList<String> people;
 
     private int numPlaces = 0;
 
     public Plan(){
         name = "";
         places = new ArrayList<Place>();
-        people = new ArrayList<String>();
     }
 
     public Plan(String json){
@@ -61,6 +60,7 @@ public class Plan implements Serializable{
             }
 
         } catch(JSONException e){
+            name = INVALID_PLAN_NAME;
         }
     }
 
@@ -103,23 +103,6 @@ public class Plan implements Serializable{
     public void addPlace(Place place) {
         places.add(place);
         numPlaces = places.size();
-    }
-
-    public int getNumPeople() {
-        return people.size();
-    }
-
-    public String getPerson(int i) {
-        if (i < people.size()){
-            return people.get(i);
-        }
-        else{
-            return null;
-        }
-    }
-
-    public void addPlace(String person) {
-        people.add(person);
     }
 
     /**
