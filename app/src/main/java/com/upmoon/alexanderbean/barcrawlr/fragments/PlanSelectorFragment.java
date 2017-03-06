@@ -383,11 +383,10 @@ public class PlanSelectorFragment extends Fragment {
 
                                 Log.d("PLAN CHOSEN", planName.getText().toString());
 
-                            Intent intent = new Intent(getActivity(),PlanCreator.class);
-                            startActivity(intent);
+                                startActivity(new Intent(getActivity(),PlanCreator.class));
                             } else {
                                 Log.d("PlanSelectorFragment", "Unable to load plan");
-                        }
+                            }
                         }
                     })
                     .setNegativeButton("Delete",new DialogInterface.OnClickListener(){

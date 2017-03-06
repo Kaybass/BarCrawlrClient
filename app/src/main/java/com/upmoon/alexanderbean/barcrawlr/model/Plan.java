@@ -33,7 +33,7 @@ public class Plan implements Serializable{
 
     public Plan(){
         name = "";
-        places = new ArrayList<Place>();
+        places = new ArrayList<>();
     }
 
     public Plan(String json){
@@ -107,23 +107,7 @@ public class Plan implements Serializable{
 
     public void removePlace(int i) {
         places.remove(i);
-    }
-
-    public int getNumPeople() {
-        return people.size();
-    }
-
-    public String getPerson(int i) {
-        if (i < people.size()){
-            return people.get(i);
-        }
-        else{
-            return null;
-        }
-    }
-
-    public void addPlace(String person) {
-        people.add(person);
+        numPlaces = places.size();
     }
 
     /**
