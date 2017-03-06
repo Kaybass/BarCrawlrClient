@@ -368,7 +368,6 @@ public class PlanSelectorFragment extends Fragment {
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface diag, int which) {
-                                            // TODO: Delete the Plan
                                             PlanLoader pl = new PlanLoader(getActivity());
 
                                             pl.deletePlan(planName.getText().toString() + ".plan");

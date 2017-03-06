@@ -105,6 +105,10 @@ public class Plan implements Serializable{
         numPlaces = places.size();
     }
 
+    public void removePlace(int i) {
+        places.remove(i);
+    }
+
     public int getNumPeople() {
         return people.size();
     }

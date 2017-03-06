@@ -2,9 +2,11 @@ package com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
+import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,10 +93,14 @@ public class PlaceListFragment extends Fragment {
                 // Add ourPlace (new place) to current plan.
                 CurrentPlan.getInstance().addPlaceToPlan(ourPlace);
 
-                mPlaceAdapter.notifyDataSetChanged();
+                placeListChanged();
 
             }
         }
+    }
+
+    private void placeListChanged() {
+        mPlaceAdapter.notifyDataSetChanged();
     }
 
     public void onPickButtonClick() {
@@ -123,6 +130,8 @@ public class PlaceListFragment extends Fragment {
 
         private TextView placeName, placeAddress;
 
+        private int placeIndex;
+
         public PlaceHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -136,11 +145,34 @@ public class PlaceListFragment extends Fragment {
             placeName.setText(CurrentPlan.getInstance().getPlace(pos).getName());
 
             placeAddress.setText(CurrentPlan.getInstance().getPlace(pos).getAddress());
+
+            placeIndex = pos;
         }
 
         @Override
         public void onClick(View v) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+            builder.setTitle("Remove Place")
+                    .setMessage("Would you like to remove this place from the plan?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface diag, int which) {
+                            CurrentPlan.getInstance().removePlaceFromPlan(placeIndex);
+
+                            placeListChanged();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface diag, int which) {
+                            diag.cancel();
+                        }
+                    }).setCancelable(true);
+
+            final AlertDialog alertDialogConfirmation = builder.create();
+
+            alertDialogConfirmation.show();
         }
     }
 

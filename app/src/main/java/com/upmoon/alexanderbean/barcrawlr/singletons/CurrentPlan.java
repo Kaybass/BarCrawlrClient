@@ -58,6 +58,10 @@ public class CurrentPlan {
         plan.addPlace(place);
     }
 
+    public void removePlaceFromPlan(int index) {
+        plan.removePlace(index);
+    }
+
     public Plan getPlan() {
         return plan;
     }
