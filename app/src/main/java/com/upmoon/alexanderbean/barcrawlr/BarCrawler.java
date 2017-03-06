@@ -68,6 +68,8 @@ public class BarCrawler extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("Crawl: " + CurrentPlan.getInstance().getCode());
+
         mViewPager = (ViewPager) findViewById(R.id.container);
 
         if (mViewPager != null) { setUpViewPager(); }
@@ -77,7 +79,7 @@ public class BarCrawler extends AppCompatActivity {
         mViewPager.clearOnPageChangeListeners();
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mLM = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        mLM = (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
         mLL = new LocationListener() {
             @Override

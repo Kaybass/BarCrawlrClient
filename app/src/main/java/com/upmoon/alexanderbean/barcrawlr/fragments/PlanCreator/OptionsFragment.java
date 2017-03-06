@@ -1,5 +1,6 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,15 +10,19 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
+import com.upmoon.alexanderbean.barcrawlr.fragments.PlanSelectorFragment;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
@@ -67,11 +72,34 @@ public class OptionsFragment extends Fragment {
         mSharePlan = (Button) v.findViewById(R.id.add_people_button);
         mSharePlan.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                AddPlan ap = new AddPlan();
+                AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity());
 
-                //TODO: add dialogue for user name
+                final EditText inp2 = new EditText(getActivity());
 
-                ap.execute("alex");
+                inp2.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                buildo.setTitle("Choose a username");
+
+                buildo.setView(inp2);
+
+                buildo.setPositiveButton("Join",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+                        if(!inp2.getText().toString().equals("")){
+                            AddPlan gp = new AddPlan();
+
+                            gp.execute(inp2.getText().toString());
+                        }
+                    }
+                });
+                buildo.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface diag, int which){
+                        diag.cancel();
+                    }
+                });
+
+                buildo.show();
             }
         });
 
@@ -116,7 +144,7 @@ public class OptionsFragment extends Fragment {
         private String message;
 
         @Override
-        protected Boolean doInBackground(String... planAndUserName){
+        protected Boolean doInBackground(String... userName){
 
             if(!isTaskRunning()){
 
@@ -127,7 +155,7 @@ public class OptionsFragment extends Fragment {
 
                 updateLocation();
 
-                String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(planAndUserName[0],mLongitude,mLatitude));
+                String Result = bc.sendPlan(CurrentPlan.getInstance().getPlan(),new User(userName[0],mLongitude,mLatitude));
 
                 if(Result == BarConnector.ERROR_MESSAGE){
 
@@ -152,7 +180,7 @@ public class OptionsFragment extends Fragment {
                             CurrentPlan  curp = CurrentPlan.getInstance();
                             CurrentUsers curu = CurrentUsers.getInstance();
 
-                            curu.setSelf(planAndUserName[0]);
+                            curu.setSelf(userName[0]);
 
                             curp.setCode(resultJSON.getString("code"));
 

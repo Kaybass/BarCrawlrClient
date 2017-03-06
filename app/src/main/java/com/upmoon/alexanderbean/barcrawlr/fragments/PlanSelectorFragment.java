@@ -1,7 +1,6 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments;
 
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,10 +10,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,18 +28,18 @@ import android.widget.Toast;
 
 import android.location.LocationListener;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.upmoon.alexanderbean.barcrawlr.Manifest;
+import com.upmoon.alexanderbean.barcrawlr.BarCrawler;
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.Plan;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
 import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
 import com.upmoon.alexanderbean.barcrawlr.utilities.PlanLoader;
 import com.upmoon.alexanderbean.barcrawlr.PlanCreator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -74,6 +70,8 @@ public class PlanSelectorFragment extends Fragment {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
+    private boolean taskRunning;
+
     public PlanSelectorFragment() { }
 
     @Override
@@ -96,25 +94,52 @@ public class PlanSelectorFragment extends Fragment {
             public void onClick(View view) {
                 AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity());
 
-                final EditText inp = new EditText(getActivity());
+                final EditText inp1 = new EditText(getActivity());
 
-                inp.setInputType(InputType.TYPE_CLASS_TEXT);
+                inp1.setInputType(InputType.TYPE_CLASS_TEXT);
 
                 buildo.setTitle("Join Active Plan");
 
-                buildo.setView(inp);
+                buildo.setView(inp1);
 
                 buildo.setPositiveButton("Join",new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface diag, int which){
 
+                        AlertDialog.Builder buildo = new AlertDialog.Builder(getActivity());
 
+                        final EditText inp2 = new EditText(getActivity());
+
+                        inp2.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                        buildo.setTitle("Choose a username");
+
+                        buildo.setView(inp2);
+
+                        buildo.setPositiveButton("Join",new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface diag, int which){
+                                if(!inp2.getText().toString().equals("")){
+                                    GetPlan gp = new GetPlan();
+
+                                    gp.execute(inp1.getText().toString(),inp2.getText().toString());
+                                }
+                            }
+                        });
+                        buildo.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface diag, int which){
+                                diag.cancel();
+                            }
+                        });
+
+                        buildo.show();
                     }
                 });
                 buildo.setNegativeButton("Cancel",new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface diag, int which){
-
+                        diag.cancel();
                     }
                 });
 
@@ -260,6 +285,14 @@ public class PlanSelectorFragment extends Fragment {
 
             PlanListChanged();
         }
+    }
+
+    public boolean isTaskRunning() {
+        return taskRunning;
+    }
+
+    public void setTaskRunning(boolean taskRunning) {
+        this.taskRunning = taskRunning;
     }
 
     private void PlanListChanged(){
@@ -417,31 +450,90 @@ public class PlanSelectorFragment extends Fragment {
         }
     }
 
-    private class GetPlan extends AsyncTask<String, Void,String> {
+    private class GetPlan extends AsyncTask<String, Void,Boolean> {
+
+        private String message;
 
         @Override
-        protected String doInBackground(String... codeAndUserName){
+        protected Boolean doInBackground(String... codeAndUserName){
 
-            BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
-                                            getActivity().getString(R.string.bcserverapikey));
+            if(!isTaskRunning()){
 
-            if ( ContextCompat.checkSelfPermission( getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                setTaskRunning(true);
 
-                ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                BarConnector bc = new BarConnector(getActivity().getString(R.string.bcsite),
+                        getActivity().getString(R.string.bcserverapikey));
 
                 updateLocation();
+
+                String Result = bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
+
+                if(Result == BarConnector.ERROR_MESSAGE){
+
+                    message = BarConnector.ERROR_MESSAGE;
+
+                    setTaskRunning(false);
+                    return false;
+                }
+                else{
+
+                    try{
+
+                        JSONObject resultJSON = new JSONObject(Result);
+
+                        if(resultJSON.has("error")){
+                            message = resultJSON.getString("error");
+
+                            setTaskRunning(false);
+                            return false;
+                        }
+                        else{
+                            CurrentPlan  curp = CurrentPlan.getInstance();
+                            CurrentUsers curu = CurrentUsers.getInstance();
+
+                            curp.setPlan(new Plan(resultJSON.getString("plan")));
+
+                            if(curp.getName().equals(Plan.INVALID_PLAN_NAME)){
+                                message = "Bad plan oh no";
+                                setTaskRunning(false);
+                                return false;
+                            }
+
+                            curu.setSelf(codeAndUserName[1]);
+
+                            curp.setCode(codeAndUserName[0]);
+
+                            curu.loadUsers(resultJSON.getJSONObject("users"));
+
+                            setTaskRunning(false);
+                            return true;
+                        }
+                    }
+                    catch(JSONException e){
+                        message = "Server sent bad JSON";
+                        setTaskRunning(false);
+                        return false;
+                    }
+                }
             }
-
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-            bc.sendCode(codeAndUserName[0],new User(codeAndUserName[1],mLongitude,mLatitude));
-
-            return "";
+            else{
+                message = "";
+                setTaskRunning(false);
+                return false;
+            }
         }
 
         @Override
-        protected void onPostExecute(String str){
-            Toast.makeText(getActivity(), "Disconnected",Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(Boolean str){
+            if(str){
+                Intent i = new Intent(getActivity(),BarCrawler.class);
+                startActivity(i);
+            }
+            else{
+                if(!message.equals("")){
+                    Toast.makeText(getActivity(), message,Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
