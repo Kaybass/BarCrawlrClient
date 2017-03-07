@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
@@ -26,8 +25,6 @@ public class OptionsFragment extends Fragment {
 
     private LocationManager mLM;
 
-    private Button mDisconnectButton;
-
     private volatile boolean mTaskRunning = false;
 
     public OptionsFragment() {
@@ -41,18 +38,16 @@ public class OptionsFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_options, container, false);
 
-        // Initialize Disconnect Button
-        mDisconnectButton = (Button) v.findViewById(R.id.disconnect);
-
-        mDisconnectButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Disconnect dc = new Disconnect();
-
-                dc.execute(CurrentUsers.getInstance().getSelf());
-            }
-        });
-
         return v;
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        
+        Disconnect dc = new Disconnect();
+
+        dc.execute(CurrentUsers.getInstance().getSelf());
     }
 
     private Location getCurrentLocation() {
