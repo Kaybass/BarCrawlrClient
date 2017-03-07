@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- String literals used in BarCrawlr -->
+    <string name="leave_crawl">Disconnect</string>
+</resources>

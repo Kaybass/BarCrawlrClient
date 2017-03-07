@@ -222,8 +222,8 @@ public class BarCrawler extends AppCompatActivity {
             Location location = mLM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             //handles mildy rare case where device has no known last location
             if(!(location == null)) {
-                mLongitude = location.getLongitude();
-                mLatitude = location.getLatitude();
+                setLongitude(location.getLongitude());
+                setLatitude(location.getLatitude());
             } else {
                 mLongitude = 0;
                 mLatitude = 0;
