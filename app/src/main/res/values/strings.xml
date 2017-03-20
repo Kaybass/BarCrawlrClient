@@ -1,26 +1,2 @@
 <resources>
-    <string name="app_name">Bar Crawlr</string>
-    <string name="title_activity_bar_crawler">BarCrawler</string>
-    <string name="title_activity_plan_creator">Plan Creator</string>
-    <string name="title_activity_plan_selector">Plan Selector</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-
-    <!-- TODO: A lot of these don't make sense -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome">Welcome to Bar Crawlr!</string>
-    <string name="select_plan">Select an existing crawl to modify or create a new one.</string>
-    <string name="add_place">Add Place</string>
-    <string name="no_plans">:( No plans, make a new one!</string>
-    <string name="save_plan">Create Crawl</string>
-    <string name="plan_selected_dialog_title">Confirm Plan</string>
-    <string name="mit_license_message">Copyright (c) 2016 Alexander Bean Apmann, Joseph Listro\n\n
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</string>
 </resources>
