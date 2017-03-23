@@ -66,6 +66,10 @@ public class MapFragment extends SupportMapFragment {
         }
     }
 
+    public void update(){
+        updateUI(mMap);
+    }
+
     private void updateUI(GoogleMap map) {
         if (mMap == null) {
             return;

@@ -40,7 +40,7 @@ import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class BarCrawler extends AppCompatActivity {
 
-    private static final int MINUTES_TO_MILLISECONDS = 60000;
+    private static final int MINUTES_TO_MILLISECONDS = 1000;
 
     private static int mMinutesToUpdate = 3;
 
@@ -51,6 +51,9 @@ public class BarCrawler extends AppCompatActivity {
     private LocationListener mLL;
 
     private Thread mUpdateThread;
+
+    private MapFragment mapFragment;
+    private PeopleListFragment peopleListFragment;
 
     private volatile boolean mRunning = true;
 
@@ -69,6 +72,9 @@ public class BarCrawler extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setTitle("Crawl: " + CurrentPlan.getInstance().getCode());
+
+        mapFragment = new MapFragment();
+        peopleListFragment = new PeopleListFragment();
 
         mViewPager = (ViewPager) findViewById(R.id.container);
 
@@ -121,6 +127,14 @@ public class BarCrawler extends AppCompatActivity {
                     Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
 
                     parseUserResponse(usersResponse);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mapFragment.update();
+                            peopleListFragment.update();
+                        }
+                    });
 
                     //Sleep
                     try {
@@ -250,11 +264,13 @@ public class BarCrawler extends AppCompatActivity {
         }
     }
 
+
+
     private void setUpViewPager() {
         BC_Adapter adapter = new BC_Adapter(getSupportFragmentManager());
-        adapter.addFragment(new MapFragment(), "Map");
+        adapter.addFragment(mapFragment, "Map");
         adapter.addFragment(new PlaceListFragment(), "Places");
-        adapter.addFragment(new PeopleListFragment(), "People");
+        adapter.addFragment(peopleListFragment, "People");
         adapter.addFragment(new OptionsFragment(), "Options");
         mViewPager.setAdapter(adapter);
     }

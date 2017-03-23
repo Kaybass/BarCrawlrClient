@@ -31,7 +31,7 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class PeopleListFragment extends Fragment {
 
-    private static final int MINUTES_TO_MILLISECONDS = 60000;
+    private static final int MINUTES_TO_MILLISECONDS = 10000;
 
     private static int mMinutesToUpdate = 3;
 
@@ -57,36 +57,6 @@ public class PeopleListFragment extends Fragment {
 
         updateLocationToCached();
 
-        mUpdateThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                BarConnector bc = new BarConnector(getString(R.string.bcsite),
-                        getString(R.string.bcserverapikey));
-
-                while(isRunning()) {
-
-                    // Update Client Location
-
-                    String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
-                            , new User(CurrentUsers.getInstance().getSelf(), getLongitude(), getLatitude()));
-
-                    Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
-
-                    parseUserResponse(usersResponse);
-
-                    //Sleep
-                    try {
-                        Thread.sleep(getSleepTime());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        });
-        mUpdateThread.start();
     }
 
     @Override
@@ -102,6 +72,11 @@ public class PeopleListFragment extends Fragment {
         mPeopleRecyclerView.setAdapter(mPeopleAdapter);
 
         return v;
+    }
+
+    public void update(){
+        if(mPeopleAdapter != null)
+            mPeopleAdapter.notifyDataSetChanged();
     }
 
     public boolean isRunning() {
@@ -150,26 +125,6 @@ public class PeopleListFragment extends Fragment {
                 mLongitude = 0;
                 mLatitude = 0;
             }
-        }
-    }
-
-    public void parseUserResponse(String users){
-        try{
-            JSONObject usersJson = new JSONObject(users);
-
-            if(usersJson.has("error")){
-                Log.d("BarCrawlrActivity", "Server sent:" + usersJson.getString("error"));
-                String errorMessage = "error: " + usersJson.getString("error");
-                Toast.makeText(getActivity(), errorMessage ,Toast.LENGTH_SHORT ).show();
-            }
-            else{
-                CurrentUsers.getInstance().loadUsers(usersJson);
-                mPeopleAdapter.notifyDataSetChanged();
-            }
-
-        }
-        catch (JSONException e){
-            Log.d("BarCrawlrActivity", "Server sent bad response to users");
         }
     }
 
