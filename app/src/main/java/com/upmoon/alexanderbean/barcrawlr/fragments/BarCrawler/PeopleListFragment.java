@@ -1,31 +1,92 @@
 package com.upmoon.alexanderbean.barcrawlr.fragments.BarCrawler;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
+import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
+import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
 
-import java.lang.reflect.Array;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 
 public class PeopleListFragment extends Fragment {
 
+    private static final int MINUTES_TO_MILLISECONDS = 60000;
+
+    private static int mMinutesToUpdate = 3;
+
     private RecyclerView mPeopleRecyclerView;
     private PeopleAdapter mPeopleAdapter;
 
+    private LocationManager mLM;
+    private LocationListener mLL;
+
+    private Thread mUpdateThread;
+
+    private volatile boolean mRunning = true;
+
+    private static int mSleepTime = mMinutesToUpdate * MINUTES_TO_MILLISECONDS;
+
+    private double mLongitude;
+
+    private double mLatitude;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        updateLocationToCached();
+
+        mUpdateThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                BarConnector bc = new BarConnector(getString(R.string.bcsite),
+                        getString(R.string.bcserverapikey));
+
+                while(isRunning()) {
+
+                    // Update Client Location
+
+                    String usersResponse = bc.locationUpdate(CurrentPlan.getInstance().getCode()
+                            , new User(CurrentUsers.getInstance().getSelf(), getLongitude(), getLatitude()));
+
+                    Log.d("BarCrawlrThread", "Server sent: " + usersResponse);
+
+                    parseUserResponse(usersResponse);
+
+                    //Sleep
+                    try {
+                        Thread.sleep(getSleepTime());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+        mUpdateThread.start();
     }
 
     @Override
@@ -41,6 +102,75 @@ public class PeopleListFragment extends Fragment {
         mPeopleRecyclerView.setAdapter(mPeopleAdapter);
 
         return v;
+    }
+
+    public boolean isRunning() {
+        return mRunning;
+    }
+
+    public void setRunning(boolean mRunning) {
+        this.mRunning = mRunning;
+    }
+
+    public static int getSleepTime() {
+        return mSleepTime;
+    }
+
+    public static void setSleepTime(int mSleepTime) {
+        PeopleListFragment.mSleepTime = mSleepTime;
+    }
+
+    public double getLongitude() {
+        return mLongitude;
+    }
+
+    public void setLongitude(double mLongitude) {
+        this.mLongitude = mLongitude;
+    }
+
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public void setLatitude(double mLatitude) {
+        this.mLatitude = mLatitude;
+    }
+
+    private void updateLocationToCached(){
+        if(getActivity().checkCallingOrSelfPermission("android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+            mLM = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+
+            //gets last known location, low energy use, low effort
+            Location location = mLM.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //handles mildy rare case where device has no known last location
+            if(!(location == null)) {
+                setLongitude(location.getLongitude());
+                setLatitude(location.getLatitude());
+            } else {
+                mLongitude = 0;
+                mLatitude = 0;
+            }
+        }
+    }
+
+    public void parseUserResponse(String users){
+        try{
+            JSONObject usersJson = new JSONObject(users);
+
+            if(usersJson.has("error")){
+                Log.d("BarCrawlrActivity", "Server sent:" + usersJson.getString("error"));
+                String errorMessage = "error: " + usersJson.getString("error");
+                Toast.makeText(getActivity(), errorMessage ,Toast.LENGTH_SHORT ).show();
+            }
+            else{
+                CurrentUsers.getInstance().loadUsers(usersJson);
+                mPeopleAdapter.notifyDataSetChanged();
+            }
+
+        }
+        catch (JSONException e){
+            Log.d("BarCrawlrActivity", "Server sent bad response to users");
+        }
     }
 
     private class PeopleHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
