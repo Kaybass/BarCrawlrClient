@@ -186,6 +186,8 @@ public class OptionsFragment extends Fragment {
 
                             curu.loadUsers(resultJSON.getJSONObject("users"));
 
+                            curu.setPlanIsActive(true);
+
                             setTaskRunning(false);
                             return true;
                         }
