@@ -82,6 +82,9 @@ public class MapFragment extends SupportMapFragment {
         }
 
         if((mCurrentLocation != null) || (CurrentPlan.getInstance().getNumPlaces() != 0)) {
+            // Remove all existing markers.
+            mMap.clear();
+
             // Create an ArrayList to hold the Markers
             ArrayList<Marker> markers = new ArrayList<>();
 
