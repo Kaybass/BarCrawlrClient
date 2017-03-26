@@ -136,7 +136,7 @@ public class MapFragment extends SupportMapFragment {
             }
             LatLngBounds bounds = builder.build();
 
-            int padding = 25;    // Offset from the edge in pixels
+            int padding = 100;    // Offset from the edge in pixels
             CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             mMap.animateCamera(update);
         }
