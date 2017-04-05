@@ -13,7 +13,8 @@
     <string name="select_plan">Select an existing crawl to modify or create a new one.</string>
     <string name="add_place">Add Place</string>
     <string name="no_plans">:( No plans, make a new one!</string>
-    <string name="save_plan">Create Crawl</string>
+    <string name="save_plan">Save Crawl Locally</string>
+    <string name="share_plan">Start Crawl</string>
     <string name="plan_selected_dialog_title">Confirm Plan</string>
 
 

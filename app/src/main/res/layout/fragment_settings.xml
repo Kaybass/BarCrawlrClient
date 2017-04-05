@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="150dp"
-        android:text="Save Plan"/>
+        android:text="@string/save_plan"/>
 
     <Button
         android:id="@+id/add_people_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Share"/>
+        android:text="@string/share_plan"/>
 
 </FrameLayout>

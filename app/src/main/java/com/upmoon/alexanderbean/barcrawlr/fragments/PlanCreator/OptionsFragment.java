@@ -170,6 +170,8 @@ public class OptionsFragment extends Fragment {
 
                         JSONObject resultJSON = new JSONObject(Result);
 
+                        Log.d("Options Fragment : ", resultJSON.getString("code"));
+
                         if(resultJSON.has("error")){
                             message = resultJSON.getString("error");
 
