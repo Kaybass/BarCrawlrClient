@@ -8,21 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.upmoon.alexanderbean.barcrawlr.R;
 import com.upmoon.alexanderbean.barcrawlr.model.User;
-import com.upmoon.alexanderbean.barcrawlr.networking.BarConnector;
-import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentPlan;
 import com.upmoon.alexanderbean.barcrawlr.singletons.CurrentUsers;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
