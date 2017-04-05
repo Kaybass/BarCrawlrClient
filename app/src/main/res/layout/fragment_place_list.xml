@@ -2,20 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
     android:orientation="vertical"
     tools:context="com.upmoon.alexanderbean.barcrawlr.fragments.PlanCreator.PlaceListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/places_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/add_place_button"
-        android:layout_width="wrap_content"
+        android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/add_place"/>
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/cast_libraries_material_featurehighlight_center_threshold"
+        android:background="@android:color/holo_green_light"
+        android:text="@string/add_place"
+        android:textSize="18sp" />
 
 </FrameLayout>
