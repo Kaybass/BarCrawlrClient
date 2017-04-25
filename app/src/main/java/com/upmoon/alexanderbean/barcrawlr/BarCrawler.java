@@ -181,6 +181,8 @@ public class BarCrawler extends AppCompatActivity {
 
                         //TODO write function to clean up stuff from plan
 
+                        mRunning = false;
+
                         finish();
                     }
                 })
